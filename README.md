@@ -1,4 +1,4 @@
-# ProfilAnalyse
+# Profil Analyser
 Cura profil analyser ( initialy based on the GodMod Plugin https://github.com/sedwards2009/cura-god-mode-plugin )
 
 Plugin for Cura to analyse my Cura profils configuration much easier.
