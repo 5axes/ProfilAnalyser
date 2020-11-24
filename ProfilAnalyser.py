@@ -221,14 +221,19 @@ def formatContainerMetaDataRows(def_container):
         # html += formatKeyValueTableRow("<id>", def_container, extra_class="metadata")
         html += formatKeyValueTableRow("id", safeCall(def_container.getId), extra_class="metadata")
         html += formatKeyValueTableRow("name", safeCall(def_container.getName), extra_class="metadata")
-        html += formatKeyValueTableRow("definition", safeCall(def_container.getDefinition), extra_class="metadata")
-        html += formatStringTableRow("type", safeCall(def_container.getType), extra_class="metadata")
+        
         # hasattr() method returns true if an object has the given named attribute and false if it does not
         if hasattr(def_container, "_getDefinition"):
            html += formatKeyValueTableRow("definition", safeCall(def_container._getDefinition), extra_class="metadata")
         html += formatKeyValueTableRow("read only", safeCall(def_container.isReadOnly), extra_class="metadata")
-        html += formatKeyValueTableRow("path", safeCall(def_container.getPath), extra_class="metadata")
-        # html += formatKeyValueTableRow("metadata", safeCall(def_container.getMetaData), extra_class="metadata")
+        if hasattr(def_container, "getPath"):
+            html += formatKeyValueTableRowFile("path", safeCall(def_container.getPath), extra_class="metadata")
+        if hasattr(def_container, "getType"):
+            html += formatStringTableRow("type", safeCall(def_container.getType), extra_class="metadata")
+        if hasattr(def_container, "getDefinition"):
+            html += formatKeyValueTableRow("definition", safeCall(def_container.getDefinition), extra_class="metadata")
+        html += formatKeyValueTableRow("metadata", safeCall(def_container.getMetaData), extra_class="metadata")
+
     except:
         pass
 
@@ -355,6 +360,28 @@ def formatKeyValueTableRow(key, value, extra_class=""):
 
     return "<tr class='" + extra_class + " " + clazz + "'><td class='key'>" + formatted_key + "</td><td class='value'>" + formatted_value + "</td></tr>\n"
 
+def formatKeyValueTableRowFile(key, value, extra_class=""):
+    clazz = ""
+    if isinstance(value, Exception):
+        clazz = "exception"
+
+    if isinstance(value, RawHtml):
+        formatted_value = value.value
+    elif isinstance(value, dict):
+        formatted_value = encode(json.dumps(value, sort_keys=True, indent=4))
+        clazz += " preformat"
+    elif isinstance(value, DefinitionContainer):
+        formatted_value = encode(value.getId() + " " + str(value))
+    else:
+        formatted_value = encode(str(value))
+
+    if isinstance(key, RawHtml):
+        formatted_key = key.value
+    else:
+        formatted_key = encode(str(key))
+
+    return "<tr class='" + extra_class + " " + clazz + "'><td class='key'>" + formatted_key + "</td><td class='value'><a href='" + formatted_value + "'>" + formatted_value + "</a></td></tr>\n"
+    
 def formatSettingsKeyTableRow(key, value):
     clazz = ""
     # Test if type Exception
