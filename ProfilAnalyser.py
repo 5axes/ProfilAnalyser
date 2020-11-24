@@ -11,6 +11,9 @@ from UM.Extension import Extension
 from UM.Application import Application
 from UM.Settings.ContainerRegistry import ContainerRegistry
 
+from UM.Logger import Logger
+from UM.Message import Message
+
 from PyQt5.QtCore import QObject, QUrl
 from PyQt5.QtGui import QDesktopServices
 
@@ -18,6 +21,7 @@ import os.path
 import tempfile
 import html
 import json
+import re
 
 encode = html.escape
 
@@ -270,12 +274,6 @@ def formatContainerStackMenu(stack):
     html += "</ul>\n"
     return html
 
-def formatContainerMetaDataOnly(container):
-    html = tableHeader("Container: " + safeCall(container.getId))
-    html += formatContainerMetaDataRows(container)
-    html += tableFooter()
-    return html
-
 def formatContainer(container, name="Container", short_value_properties=False, show_keys=True):
     html = ""
     html += "<a id='" + str(id(container)) + "' ></a>"
@@ -302,11 +300,11 @@ def formatContainerMetaDataRows(def_container):
         # html += formatKeyValueTableRow("<id>", def_container, extra_class="metadata")
         html += formatKeyValueTableRow("id", safeCall(def_container.getId), extra_class="metadata")
         html += formatKeyValueTableRow("name", safeCall(def_container.getName), extra_class="metadata")
-        if hasattr(def_container, "_getDefinition"):
-            html += formatKeyValueTableRow("definition", safeCall(def_container._getDefinition), extra_class="metadata")
+        # if hasattr(def_container, "_getDefinition"):
+        #    html += formatKeyValueTableRow("definition", safeCall(def_container._getDefinition), extra_class="metadata")
         html += formatKeyValueTableRow("read only", safeCall(def_container.isReadOnly), extra_class="metadata")
         html += formatKeyValueTableRow("path", safeCall(def_container.getPath), extra_class="metadata")
-        html += formatKeyValueTableRow("metadata", safeCall(def_container.getMetaData), extra_class="metadata")
+        # html += formatKeyValueTableRow("metadata", safeCall(def_container.getMetaData), extra_class="metadata")
     except:
         pass
 
@@ -323,9 +321,20 @@ def formatSettingValue(container, key, properties=None):
     for prop_name in properties:
         prop_value = container.getProperty(key, prop_name)
         if prop_value is not None:
-            value += "  <li>\n"
-            value += "    <span class='prop_name'>" + encode(prop_name) + ":</span> " + encode(repr(prop_value))
-            value += "  </li>\n"
+            if prop_name=="default_value" or prop_name=="value" :
+                # repr() function returns a printable representation of the given object
+                print_value = repr(prop_value)
+                if print_value.find("UM.Settings.SettingFunction") > 0 :
+                    # Logger.log('d', 'print_value : ' + print_value)
+                    strtok_value = print_value.split("=",1)
+                    # Logger.log('d', 'print_value : ' + str(strtok_value[1]))
+                    final_value = "=" + strtok_value[1].replace(" >","")
+                else :
+                    final_value = print_value
+                    
+                value += "  <li>\n"
+                value += "    <span class='prop_name'>" + encode(prop_name) + ":</span> " + encode(final_value)
+                value += "  </li>\n"
     value += "</ul>\n"
 
     return RawHtml(value)
@@ -370,16 +379,21 @@ def formatKeyValueTableRow(key, value, extra_class=""):
 
 def formatSettingsKeyTableRow(key, value):
     clazz = ""
+    # Test if type Exception
     if isinstance(value, Exception):
         clazz = "exception"
 
+    # Test if type RawHtml
     if isinstance(value, RawHtml):
         formatted_value = value.value
+        Display_Key = "&#x1f511; "
     else:
         formatted_value = encode(str(value))
+        Display_Key = "&#x1F527; "
 
     formatted_key = encode(str(key))
-    return "<tr class='" + clazz + "' --data-key='" + formatted_key + "'><td class='key'>&#x1f511; " + formatted_key + "</td><td class='value'>" + formatted_value + "</td></tr>\n"
+    # &#x1f511;  => Key symbole
+    return "<tr class='" + clazz + "' --data-key='" + formatted_key + "'><td class='key'>" + Display_Key + formatted_key + "</td><td class='value'>" + formatted_value + "</td></tr>\n"
 
 def keyFilterJS():
     return """
