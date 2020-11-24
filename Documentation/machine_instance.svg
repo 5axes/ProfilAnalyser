@@ -18,35 +18,35 @@
         <rect x="395" y="5" width="300" height="450" rx="20" /> <!-- Right extruder. -->
     </g>
     <g font-family="sans-serif" font-size="25" dominant-baseline="middle" text-anchor="middle">
-        <text x="350" y="582.5">Global stack</text> <!-- Slightly lowered since the top line is thicker than the bottom. -->
-        <text x="350" y="630">User</text>
-        <text x="350" y="680">Custom</text>
-        <text x="350" y="730">Intent</text>
-        <text x="350" y="780">Quality</text>
-        <text x="350" y="830">Material</text>
-        <text x="350" y="880">Variant</text>
-        <text x="350" y="930">Definition changes</text>
-        <text x="350" y="980">Printer</text>
+        <text x="350" y="582.5">Pile Globale</text> <!-- Slightly lowered since the top line is thicker than the bottom. -->
+        <text x="350" y="630">Utilisateur</text>
+        <text x="350" y="680">Personnalisation</text>
+        <text x="350" y="730">Objectif</text>
+        <text x="350" y="780">Qualité</text>
+        <text x="350" y="830">Matière</text>
+        <text x="350" y="880">Variante</text>
+        <text x="350" y="930">Changement Définition</text>
+        <text x="350" y="980">Imprimante</text>
 
-        <text x="155" y="32.5">Left extruder</text> <!-- Slightly lowered again. -->
-        <text x="155" y="80">User</text>
-        <text x="155" y="130">Custom</text>
-        <text x="155" y="180">Intent</text>
-        <text x="155" y="230">Quality</text>
-        <text x="155" y="280">Material</text>
-        <text x="155" y="330">Nozzle</text>
-        <text x="155" y="380">Definition changes</text>
-        <text x="155" y="430">Extruder</text>
+        <text x="155" y="32.5">Extrudeuse gauche</text> <!-- Slightly lowered again. -->
+        <text x="155" y="80">Utilisateur</text>
+        <text x="155" y="130">Personnalisation</text>
+        <text x="155" y="180">Objectif</text>
+        <text x="155" y="230">Qualité</text>
+        <text x="155" y="280">Matière</text>
+        <text x="155" y="330">Buse</text>
+        <text x="155" y="380">Changement Définition</text>
+        <text x="155" y="430">Extrudeuse</text>
 
-        <text x="545" y="32.5">Right extruder</text> <!-- Slightly lowered again. -->
-        <text x="545" y="80">User</text>
-        <text x="545" y="130">Custom</text>
-        <text x="545" y="180">Intent</text>
-        <text x="545" y="230">Quality</text>
-        <text x="545" y="280">Material</text>
-        <text x="545" y="330">Nozzle</text>
-        <text x="545" y="380">Definition changes</text>
-        <text x="545" y="430">Extruder</text>
+        <text x="545" y="32.5">Extrudeuse droite</text> <!-- Slightly lowered again. -->
+        <text x="545" y="80">Utilisateur</text>
+        <text x="545" y="130">Personnalisation</text>
+        <text x="545" y="180">Objectif</text>
+        <text x="545" y="230">Qualité</text>
+        <text x="545" y="280">Matière</text>
+        <text x="545" y="330">Buse</text>
+        <text x="545" y="380">Changement Définition</text>
+        <text x="545" y="430">Extrudeuse</text>
     </g>
     <g stroke="black" stroke-width="5" marker-end="url(#arrow)"> <!-- Arrows. -->
         <line x1="155" y1="455" x2="345" y2="545" />
