@@ -15,15 +15,25 @@ Une situation un peu plus compliquée se produit lorsque la valeur d'un paramèt
 Lorsque nous demandons la valeur de "foo", nous nous attendons à obtenir 25 en conséquence. Les appels suivants seront effectués dans l'ordre :
 
 >extruder_stack.getProperty("foo", "value")
+
 >user.getProperty("foo", "value") -> Returns None
+
 >quality_changes.getProperty("foo", "value") -> Returns None
+
 >intent.getProperty("foo", "value") -> Returns None
+
 >quality.getProperty("foo", "value") -> Returns "=bar/2"
+
 >user.getProperty("bar", "value") -> returns None
+
 >quality_changes.getProperty("bar", "value) -> Returns None
+
 >intent.getProperty("bar", "value) -> Returns None
+
 >quality.getProperty("bar", "value) -> Returns None
+
 >material.getProperty("bar", "value) -> Returns 50
+
 
 ## Profiles
 
