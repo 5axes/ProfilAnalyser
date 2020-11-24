@@ -1,0 +1,8 @@
+{
+    "name": "Profil Analyse",
+    "author": "5@xes",
+    "version": "0.0.1",
+    "description": "Dump the contents of all settings to a HTML file.",
+    "api": "7.0",
+    "supported_sdk_versions": ["6.0.0", "7.0.0", "7.1.0", "7.2.0", "7.3.0", "7.4.0"]
+}
