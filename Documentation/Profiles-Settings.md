@@ -36,9 +36,9 @@ Lorsque nous demandons la valeur de "support_xy_distance", nous nous attendons Ã
 
 >material.getProperty("wall_line_width_0", "value") -> Returns None
 
->printer.getProperty("wall_line_width_0", "value") -> Returns "=wall_line_width"
+>machine.getProperty("wall_line_width_0", "value") -> Returns "=wall_line_width"
 
->printer.getProperty("wall_line_width", "value") -> Returns 0.4
+>machine.getProperty("wall_line_width", "value") -> Returns 0.4
 
 
 ## Profiles
