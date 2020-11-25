@@ -8,31 +8,36 @@ Cura utilise un système de profils superposés. Un aperçu schématique de ce s
 ## Paramètres
 
 
-Chacune des entrées de la pile (par exemple, Utilisateur, Qualité, Matériel, etc.) décrit un profil. Lorsque nous voulons savoir quel pourcentage de remplissage doit être utilisé ("infill_sparse_density"), nous demandons simplement à la pile de l'extrudeuse quelle est sa valeur. La pile de l'extrudeuse demandera ensuite à chacun des profils qu'elle possède (en séquence) s'ils ont une valeur pour le paramètre demandé. Le premier profil à donner une réponse définira le résultat.
+Chacune des entrées de la pile (par exemple, Utilisateur, Qualité, Matière, etc.) décrit un profil. Lorsque nous voulons savoir quel pourcentage de remplissage doit être utilisé ("infill_sparse_density"), nous demandons simplement à la pile de l'extrudeuse quelle est sa valeur. La pile de l'extrudeuse demandera ensuite à chacun des profils qui la caractérise (en séquence) s'ils ont une valeur pour le paramètre demandé. Le premier profil à donner une réponse définira le résultat.
 
-Une situation un peu plus compliquée se produit lorsque la valeur d'un paramètre est définie par une fonction. Prenons l'exemple suivant. Nous avons un paramètre "foo" dont la valeur est définie par la formule "=bar / 2". Cette valeur est définie dans le profil de qualité de l'extrudeuse de gauche. La valeur de "bar" est définie dans le matériau uniquement et est fixée à 50.
+Une situation un peu plus compliquée se produit lorsque la valeur d'un paramètre est définie par une fonction. Prenons l'exemple suivant. Nous avons un paramètre "support_xy_distance" (Distance des supports en X/Y par rapport au modèle)  dont la valeur est définie par la formule "=wall_line_width_0 * 2". Cette valeur est définie dans le profil de qualité de l'extrudeuse. La valeur de "wall_line_width_0" est définie dans la configuration de l'imprimante uniquement et est fixée à 0.4 (il est lui même égal à 	
+=wall_line_width).
 
-Lorsque nous demandons la valeur de "foo", nous nous attendons à obtenir 25 en conséquence. Les appels suivants seront effectués dans l'ordre :
+Lorsque nous demandons la valeur de "support_xy_distance", nous nous attendons à obtenir 0.8 en conséquence. Les appels suivants seront effectués dans l'ordre :
 
->extruder_stack.getProperty("foo", "value")
+>extruder_stack.getProperty("support_xy_distance", "value") -> Returns 0.8
 
->user.getProperty("foo", "value") -> Returns None
+>user.getProperty("support_xy_distance", "value") -> Returns None
 
->quality_changes.getProperty("foo", "value") -> Returns None
+>quality_changes.getProperty("support_xy_distance", "value") -> Returns None
 
->intent.getProperty("foo", "value") -> Returns None
+>intent.getProperty("support_xy_distance", "value") -> Returns None
 
->quality.getProperty("foo", "value") -> Returns "=bar/2"
+>quality.getProperty("support_xy_distance", "value") -> Returns "=wall_line_width_0 * 2"
 
->user.getProperty("bar", "value") -> returns None
+>user.getProperty("wall_line_width_0", "value") -> returns None
 
->quality_changes.getProperty("bar", "value) -> Returns None
+>quality_changes.getProperty("wall_line_width_0", "value) -> Returns None
 
->intent.getProperty("bar", "value) -> Returns None
+>intent.getProperty("wall_line_width_0", "value) -> Returns None
 
->quality.getProperty("bar", "value) -> Returns None
+>quality.getProperty("wall_line_width_0", "value) -> Returns None
 
->material.getProperty("bar", "value) -> Returns 50
+>material.getProperty("wall_line_width_0", "value) -> Returns None
+
+>printer.getProperty("wall_line_width_0", "value) -> Returns "=wall_line_width"
+
+>printer.getProperty("wall_line_width", "value) -> Returns 0.4
 
 
 ## Profiles
