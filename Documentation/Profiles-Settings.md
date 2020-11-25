@@ -1,4 +1,5 @@
 # Profils & Paramètres
+[Document d'origine](https://github.com/Ultimaker/Cura/wiki/Profiles-&-Settings)
 
 
 Cura utilise un système de profils superposés. Un aperçu schématique de ce système est présenté dans l'image ci-dessous.
