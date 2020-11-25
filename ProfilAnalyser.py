@@ -34,13 +34,17 @@ class ProfilAnalyser(Extension, QObject):
         Extension.__init__(self)
 
         self.addMenuItem("View Active Configuration", viewAll)
-        self.addMenuItem("View All Profiles", viewAllQualityChanges)
+        self.addMenuItem("View Profil Analyse", viewCompare)
         self.addMenuItem("View All Current Printer Profiles", viewAllPrinterQualityChanges)
-        self.addMenuItem("View All User Containers", viewAllUserContainers)
+        # self.addMenuItem("View All User Containers", viewAllUserContainers)
+        # self.addMenuItem("View All Profiles", viewAllQualityChanges)
 
 def viewAll():
     openHtmlPage("cura_settings.html", htmlPage())
 
+def viewCompare():
+    openHtmlPage("cura_settings.html", htmlComparePage())
+    
 def htmlPage():
     html = getHtmlHeader()
 
@@ -73,6 +77,126 @@ def htmlPage():
 
     html += htmlFooter
     return html
+
+def htmlComparePage():
+
+    # Current machine
+    machine_manager = Application.getInstance().getMachineManager()
+    global_stack = machine_manager.activeMachine
+    machine_id=global_stack.quality.getMetaData().get("definition", "")   
+
+    containers = ContainerRegistry.getInstance().findInstanceContainers(definition = machine_id, type="quality_changes")
+
+    containers.sort(key=lambda x: x.getId())
+    containers.sort(key=lambda x: x.getName())
+    Profil_List = []
+    Container_List = []
+    liste_keys = []
+    for container in containers:
+        # type to detect Extruder or Global container analyse getMetaDataEntry("position")
+        extruder_position = container.getMetaDataEntry("position")
+        if extruder_position is None:
+            #Logger.log('d', 'global : ' + container.getId())
+            Profil_List.append(container.getName())
+            Container_List.append(str(id(container)))
+ 
+            if hasattr(container, "getAllKeys"):
+                keys = list(container.getAllKeys())
+                keys.sort()
+                for key in keys:
+                    liste_keys.append(key)
+ 
+    liste_keys = list(dict.fromkeys(liste_keys))
+    liste_keys.sort()
+    
+    html = getHtmlHeader()
+
+    # Menu creation
+    html += "<div class='menu'>\n"
+    
+    html += "<li><a href='#global_stack'>Profil List " + encode(machine_id) + "</a>"
+    html += "<ul>\n"
+    for profil in Profil_List:
+        #
+        html += "<li><a href='#" + str(Container_List[Profil_List.index(profil)]) + "'>" + encode(profil) + "</a></li>"
+            
+    html += "</ul>\n"
+    html += "</li>\n"
+
+    # Java script filter function
+    html += keyFilterWidget()
+    html += "</div>"
+    
+        
+    # Contents creation
+    html += "<div class='contents'>"
+    html += "<h2 id='global_stack'>Complet profiles list</h2>"
+    short_value_properties = True
+ 
+
+    html +="<table class=""key_value_table""><thead>"
+    html +="<tr><th>Key</th>"
+    for profil in Profil_List:
+        html +="<th>" + encode(profil)
+        html +="<a id='" + str(Container_List[Profil_List.index(profil)]) + "' ></a>"
+        html +="</th>"
+    html +="</tr></thead><tbody>"
+    
+    html += "<tr class='metadata'><td class='key'>definition</td>"
+    for container in containers:
+         # type to detect Extruder or Global container analyse getMetaDataEntry("position")
+        extruder_position = container.getMetaDataEntry("position")
+        if extruder_position is None:
+            MetaData_definition = container.getMetaDataEntry("definition")
+            if MetaData_definition is not None:
+                 html += "<td class='value'>" + MetaData_definition + "</td>"
+    html += "</tr>\n"
+
+    html += "<tr class='metadata'><td class='key'>quality_type</td>"
+    for container in containers:
+         # type to detect Extruder or Global container analyse getMetaDataEntry("position")
+        extruder_position = container.getMetaDataEntry("position")
+        if extruder_position is None:
+            MetaData_quality_type = container.getMetaDataEntry("quality_type")
+            if MetaData_quality_type is not None: 
+                html += "<td class='value'>" + MetaData_quality_type + "</td>"
+    html += "</tr>\n"
+
+    for Lkey in liste_keys:
+        html +=  "<tr class='' --data-key='" + Lkey + "'><td class='key'>&#x1f511; " + Lkey + "</td>"
+        
+        for container in containers:
+            # type to detect Extruder or Global container analyse getMetaDataEntry("position")
+            extruder_position = container.getMetaDataEntry("position")
+            if extruder_position is None:
+                # 
+                Html_td = ""
+                key_properties = ["value", "resolve"] if short_value_properties else setting_prop_names
+                key_properties.sort()
+
+                # hasattr() method returns true if an object has the given named attribute and false if it does not
+                if hasattr(container, "getAllKeys"):
+                    keys = list(container.getAllKeys())
+                    keys.sort()
+                    for key in keys:
+                        if key == Lkey :
+                            formatted_value = formatSettingValue(container, key, key_properties).value
+                            formatted_key = encode(str(key))
+                            Html_td =  "<td class='value'>" + formatted_value + "</td>" 
+                
+                if Html_td == "" :
+                    html +=  "<td class='value'>-</td>" 
+                else:
+                    html +=  Html_td 
+        
+        html +=  "</tr>\n"
+    
+    html += tableFooter()
+
+    html += "</div>"
+
+    html += htmlFooter
+    return html
     
 def viewAllUserContainers():
     openHtmlPage("cura_user_containers.html", containersOfTypeHtmlPage("User Containers", "user"))
@@ -82,7 +206,7 @@ def viewAllPrinterQualityChanges():
     machine_manager = Application.getInstance().getMachineManager()
     global_stack = machine_manager.activeMachine
     machine_id=global_stack.quality.getMetaData().get("definition", "")    
-    Logger.log('d', 'viewAllPrinterQualityChanges : ' + machine_id )
+    # Logger.log('d', 'viewAllPrinterQualityChanges : ' + machine_id )
     openHtmlPage("cura_quality_changes.html", containersOfTypeHtmlPage2("Printer Quality Changes", "quality_changes", machine_id ))
     
 def viewAllQualityChanges():
@@ -153,16 +277,24 @@ def containersOfTypeHtmlPage2(name, type_ ,machine_id_):
     
     # Sort containers Order
     containers.sort(key=lambda x: x.getId())
+    containers.reverse()
     containers.sort(key=lambda x: x.getName())
     
     # Menu creation
     for container in containers:
+        # type to detect Extruder or Global container analyse getMetaDataEntry("position")
+        extruder_position = container.getMetaDataEntry("position")
+        if extruder_position is not None:
+            html += "<ul>\n"
+            
         # Logger.log('d', 'containersOfTypeHtmlPage2 : ' + str(container) )
         if container.getName() == 'empty' :
             html += "<li><a href='#"+ str(id(container)) + "'>"+encode(container.getId())+"</a></li>\n"
         else :
             html += "<li><a href='#"+ str(id(container)) + "'>"+encode(container.getName())+"</a></li>\n"
         
+        if extruder_position is not None:
+            html += "</ul>\n"       
     html += "</ul>"
 
     # Java script filter function
@@ -178,25 +310,15 @@ def containersOfTypeHtmlPage2(name, type_ ,machine_id_):
 
 def formatAllContainersOfType2(name, type_, machine_id_):
     html = "<h2>" + name + "</h2>\n"
-
-    #if type_ == "machine":
-    #    containers = ContainerRegistry.getInstance().findDefinitionContainers()
-    #else:
     
     # type "quality_changes" or "user"
     containers = ContainerRegistry.getInstance().findInstanceContainers(definition = machine_id_, type=type_)
 
     containers.sort(key=lambda x: x.getId())
+    containers.reverse()
     containers.sort(key=lambda x: x.getName())
-                    
-    for container in containers:
-        # type to detect Extruder or Global container analyse getMetaDataEntry("position")
-        extruder_position = container.getMetaDataEntry("position")
-        if extruder_position is not None:
-            Logger.log('d', 'extruders : ' + container.getId() + "Pos : " + str(extruder_position))
-        else:
-            Logger.log('d', 'global : ' + container.getId())
-            
+    
+    for container in containers:   
         html += formatContainer(container)
     return html
     
@@ -298,6 +420,7 @@ def formatContainerStackMenu(stack):
             html += "<li><a href='#" + str(id(container)) + "'>" + encode(container.getId()) + "</a></li>"
         else:
             html += "<li><a href='#" + str(id(container)) + "'>" + encode(container.getName()) + "</a></li>"
+            
     html += "</ul>\n"
     return html
 
