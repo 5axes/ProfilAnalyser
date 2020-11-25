@@ -99,6 +99,7 @@ def containersOfTypeHtmlPage(name, type_):
     containers = ContainerRegistry.getInstance().findInstanceContainers(type=type_)
     
     # Sort containers Order
+    containers.sort(key=lambda x: x.getId())
     containers.sort(key=lambda x: x.getName())
     
     # Menu creation
@@ -132,6 +133,7 @@ def formatAllContainersOfType(name, type_):
     # type "quality_changes" or "user"
     containers = ContainerRegistry.getInstance().findInstanceContainers(type=type_)
 
+    containers.sort(key=lambda x: x.getId())
     containers.sort(key=lambda x: x.getName())
     
     for container in containers:
@@ -150,6 +152,7 @@ def containersOfTypeHtmlPage2(name, type_ ,machine_id_):
     containers = ContainerRegistry.getInstance().findInstanceContainers(definition = machine_id_, type=type_)
     
     # Sort containers Order
+    containers.sort(key=lambda x: x.getId())
     containers.sort(key=lambda x: x.getName())
     
     # Menu creation
@@ -183,6 +186,7 @@ def formatAllContainersOfType2(name, type_, machine_id_):
     # type "quality_changes" or "user"
     containers = ContainerRegistry.getInstance().findInstanceContainers(definition = machine_id_, type=type_)
 
+    containers.sort(key=lambda x: x.getId())
     containers.sort(key=lambda x: x.getName())
     
     for container in containers:
