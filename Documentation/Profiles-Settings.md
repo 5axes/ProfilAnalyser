@@ -27,17 +27,17 @@ Lorsque nous demandons la valeur de "support_xy_distance", nous nous attendons �
 
 >user.getProperty("wall_line_width_0", "value") -> returns None
 
->quality_changes.getProperty("wall_line_width_0", "value) -> Returns None
+>quality_changes.getProperty("wall_line_width_0", "value") -> Returns None
 
->intent.getProperty("wall_line_width_0", "value) -> Returns None
+>intent.getProperty("wall_line_width_0", "value") -> Returns None
 
->quality.getProperty("wall_line_width_0", "value) -> Returns None
+>quality.getProperty("wall_line_width_0", "value") -> Returns None
 
->material.getProperty("wall_line_width_0", "value) -> Returns None
+>material.getProperty("wall_line_width_0", "value") -> Returns None
 
->printer.getProperty("wall_line_width_0", "value) -> Returns "=wall_line_width"
+>printer.getProperty("wall_line_width_0", "value") -> Returns "=wall_line_width"
 
->printer.getProperty("wall_line_width", "value) -> Returns 0.4
+>printer.getProperty("wall_line_width", "value") -> Returns 0.4
 
 
 ## Profiles
@@ -46,34 +46,34 @@ Les profils ont une certaine interdépendance les uns avec les autres, comme on 
 
 ![Profile Structure](Profile-Structure.png)
 
-### Utilisateur
+### Utilisateur (User)
 
 Les paramètres de l'utilisateur sont tous les changements qui ne sont pas enregistrés dans un profil. Dans l'interface, une icône circulaire de réinitialisation est affichée pour chacun de ces paramètres. Ils sont totalement indépendants de la qualité, des changements de qualité ou de l'intention. Ils sont uniquement "liés" à une machine.
 
-### Changements de qualité
+### Changements de qualité (Quality Changes)
 
 Les modifications de qualité contiennent les paramètres que l'utilisateur a modifiés et enregistrés dans un profil. Ainsi, un profil unique généré par un utilisateur contient au moins 2 fichiers (un **quality_change** pour l'extrudeuse et un pour la pile globale). Les modifications de qualité sont uniquement liées au type_qualité, puisqu'elles décrivent un "delta" à appliquer sur une qualité. Ainsi, même si une qualité change parce qu'un matériau change, le profil des modifications de qualité peut rester le même (puisqu'il n'y a qu'un lien, le **quality_type** reste le même)
 
-### Objectif
+### Objectif (Intent)
 
 Les profils d'intention contiennent des paramètres qui modifient la qualité en leur donnant une intention (par exemple : "Engineering" ou "Smooth"). Ces profils dépendent de l'article, de la variante et du type_qualité
 
-### Qualité
+### Qualité (Quality)
 
 Les profils de qualité conservent la résolution de l'impression en réglant la hauteur des couches. Comme toutes les extrudeuses doivent avoir la même hauteur de couche, cette valeur est fixée dans la partie global_stack de la qualité.
 
-### Matière
+### Matière (Material)
 
 Conservez tous les paramètres définis par la matière active.
 
-### Variante
+### Variante (Variant)
 
 La variante, dans le cas de l'extrudeuse, contient des réglages qui ont trait à la taille de la buse ou des réglages spécifiques qui s'y rapportent.
 
-### Définition changes
+### Définition changes (Definition changes)
 
-Si un utilisateur apporte des modifications à une certaine machine, mais pas au point de la considérer comme un type de machine entièrement nouveau, les réglages sont enregistrés ici.
+Si un utilisateur apporte des modifications à une machine, mais pas au point de la considérer comme un type de machine entièrement nouveau, les réglages sont enregistrés ici.
 
-### Définition
+### Définition (Definition)
 
 Les paramètres par défaut de la machine.
