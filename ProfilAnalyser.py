@@ -188,8 +188,15 @@ def formatAllContainersOfType2(name, type_, machine_id_):
 
     containers.sort(key=lambda x: x.getId())
     containers.sort(key=lambda x: x.getName())
-    
+                    
     for container in containers:
+        # type to detect Extruder or Global container analyse getMetaDataEntry("position")
+        extruder_position = container.getMetaDataEntry("position")
+        if extruder_position is not None:
+            Logger.log('d', 'extruders : ' + container.getId() + "Pos : " + str(extruder_position))
+        else:
+            Logger.log('d', 'global : ' + container.getId())
+            
         html += formatContainer(container)
     return html
     
@@ -221,22 +228,27 @@ def formatContainerMetaDataRows(def_container):
     html = ""
     try:
         # Logger.log('d', 'quality_type : ' + safeCall(def_container.getMetaDataEntry("quality_type")))
+        html += formatKeyValueTableRow("type", def_container.getMetaDataEntry("type"), extra_class="metadata") 
         # html += formatKeyValueTableRow("<type>", type(def_container), extra_class="metadata")
         # html += formatKeyValueTableRow("<id>", def_container, extra_class="metadata")
         html += formatKeyValueTableRow("id", safeCall(def_container.getId), extra_class="metadata")
         html += formatKeyValueTableRow("name", safeCall(def_container.getName), extra_class="metadata")
-        
+ 
+        MetaData_definition = def_container.getMetaDataEntry("definition")
+        if MetaData_definition is not None:
+            html += formatKeyValueTableRow("definition", MetaData_definition, extra_class="metadata")
+        MetaData_quality_type = def_container.getMetaDataEntry("quality_type")
+        if MetaData_quality_type is not None:
+            html += formatKeyValueTableRow("quality_type", MetaData_quality_type, extra_class="metadata")  
+            
         # hasattr() method returns true if an object has the given named attribute and false if it does not
-        if hasattr(def_container, "_getDefinition"):
-           html += formatKeyValueTableRow("definition", safeCall(def_container._getDefinition), extra_class="metadata")
         html += formatKeyValueTableRow("read only", safeCall(def_container.isReadOnly), extra_class="metadata")
         if hasattr(def_container, "getPath"):
             html += formatKeyValueTableRowFile("path", safeCall(def_container.getPath), extra_class="metadata")
         if hasattr(def_container, "getType"):
             html += formatStringTableRow("type", safeCall(def_container.getType), extra_class="metadata")
-        if hasattr(def_container, "getDefinition"):
-            html += formatKeyValueTableRow("definition", safeCall(def_container.getDefinition), extra_class="metadata")
-        html += formatKeyValueTableRow("metadata", safeCall(def_container.getMetaData), extra_class="metadata")
+
+        #html += formatKeyValueTableRow("metadata", safeCall(def_container.getMetaData), extra_class="metadata")
 
     except:
         pass
