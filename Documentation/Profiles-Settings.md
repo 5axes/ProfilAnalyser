@@ -43,7 +43,7 @@ Lorsque nous demandons la valeur de "support_xy_distance", nous nous attendons �
 
 ## Profiles
 
-Les profils ont une certaine interdépendance les uns avec les autres, comme on peut le voir sur la photo ci-dessous. 
+Les profils ont une certaine interdépendance les uns avec les autres, comme on peut le voir sur l'image ci-dessous. 
 
 ![Profile Structure](Profile-Structure.png)
 
