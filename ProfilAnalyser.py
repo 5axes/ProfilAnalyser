@@ -124,14 +124,14 @@ def htmlComparePage():
     # Menu creation
     html += "<div class='menu'>\n"
     
-    html += "<li><a href='#Top_page'>Profil List " + encode(machine_id) + "</a>"
+    html += "<h3><a href='#Top_page'>Profil List " + encode(machine_id) + "</a></h3>"
+    
     html += "<ul>\n"
     for profil in Profil_List:
         #
         html += "<li><a href='#" + str(Container_List[Profil_List.index(profil)]) + "'>" + encode(profil) + "</a></li>"
             
     html += "</ul>\n"
-    html += "</li>\n"
 
     # Java script filter function
     html += keyFilterWidget()
@@ -202,43 +202,54 @@ def htmlComparePage():
         html +=  "</tr>\n"
     html += tableFooter()
 
-    html +="<table class=""key_value_table_extruder""><thead>\n"
-    html +="<tr><th>Key</th>\n"
-    for profil in Profil_List:
-        html +="<th>" + encode(profil)
-        html +="</th>\n"
-    html +="</tr></thead><tbody>\n"
-    
-    for Lkey in liste_keys_extruder:
-        html +=  "<tr class='' --data-key='" + Lkey + "'><td class='key'>&#x1f511; " + Lkey + "</td>"
-        for container in containers:
-            # type to detect Extruder or Global container analyse getMetaDataEntry("position")
-            extruder_position = container.getMetaDataEntry("position")
-            if extruder_position is not None:
-                # 
-                Html_td = ""
-                key_properties = ["value", "resolve"] if short_value_properties else setting_prop_names
-                key_properties.sort()
-
-                # hasattr() method returns true if an object has the given named attribute and false if it does not
-                if hasattr(container, "getAllKeys"):
-                    keys = list(container.getAllKeys())
-                    keys.sort()
-                    for key in keys:
-                        if key == Lkey :
-                            formatted_value = formatSettingCompareValue(container, key, key_properties).value
-                            formatted_key = encode(str(key))
-                            Html_td =  "<td class='value_extruder'>" + formatted_value + "</td>" 
-                
-                if Html_td == "" :
-                    html +=  "<td class='value_extruder'>-</td>" 
-                else:
-                    html +=  Html_td 
+    extruder_count=int(CuraApplication.getInstance().getGlobalContainerStack().getProperty("machine_extruder_count", "value"))
+    Logger.log('d', 'extruder_count : %s',extruder_count)
+    ind=0
+    while ind < extruder_count:
+        # Naw Table for Extruder settings
+        html +="<table class=""key_value_table_extruder""><thead>\n"
+        html +="<tr><th>" + encode("Extruder N° " + str(ind)) + "</th>\n"
+        for profil in Profil_List:
+            html +="<th>" + encode(profil)
+            html +="</th>\n"
+        html +="</tr></thead><tbody>\n"
         
-        html +=  "</tr>\n"   
-    
- 
-    html += tableFooter()
+        for Lkey in liste_keys_extruder:
+            html +=  "<tr class='' --data-key='" + Lkey + "'><td class='key'>&#x1f511; " + Lkey + "</td>"
+            for container in containers:
+                # type to detect Extruder or Global container analyse getMetaDataEntry("position")
+                # Could be none type
+                extruder_position = container.getMetaDataEntry("position")
+                if extruder_position is not None:
+                    # Logger.log('d', 'extruder_position : %s',extruder_position)
+                    # Logger.log('d', 'extruder_position : %s',ind)
+                    Extrud_Nb=int(extruder_position)
+                    if Extrud_Nb == ind :                 
+                        # 
+                        Html_td = ""
+                        key_properties = ["value", "resolve"] if short_value_properties else setting_prop_names
+                        key_properties.sort()
+
+                        # hasattr() method returns true if an object has the given named attribute and false if it does not
+                        if hasattr(container, "getAllKeys"):
+                            keys = list(container.getAllKeys())
+                            keys.sort()
+                            for key in keys:
+                                if key == Lkey :
+                                    formatted_value = formatSettingCompareValue(container, key, key_properties).value
+                                    formatted_key = encode(str(key))
+                                    Html_td =  "<td class='value_extruder'>" + formatted_value + "</td>" 
+                        
+                        if Html_td == "" :
+                            html +=  "<td class='value_extruder'>-</td>" 
+                        else:
+                            html +=  Html_td 
+            
+            html +=  "</tr>\n"   
+        
+     
+        html += tableFooter()
+        ind += 1
 
     html += "</div>"
 
@@ -476,7 +487,8 @@ def formatSettingValue(container, key, properties=None):
     if properties is None:
         properties = setting_prop_names
 
-    value = "<ul class=\"property_list\">\n"
+    #value = "<ul class=\"property_list\">\n"
+    value = ""
     comma = ""
     properties.sort()
     for prop_name in properties:
@@ -493,11 +505,12 @@ def formatSettingValue(container, key, properties=None):
                 else :
                     final_value = print_value
                     
-                value += "  <li>\n"
+                #value += "  <li>\n"
                 # value += "    <span class='prop_name'>" + encode(prop_name) + ":</span> " + encode(final_value)
                 value += encode(final_value)
-                value += "  </li>\n"
-    value += "</ul>\n"
+                # value += "  </li>\n"
+    #value += "</ul>\n"
+    value += "\n"
 
     return RawHtml(value)
 
