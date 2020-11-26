@@ -88,10 +88,13 @@ def htmlComparePage():
     containers = ContainerRegistry.getInstance().findInstanceContainers(definition = machine_id, type="quality_changes")
 
     containers.sort(key=lambda x: x.getId())
+    containers.reverse()
     containers.sort(key=lambda x: x.getName())
+    
     Profil_List = []
     Container_List = []
     liste_keys = []
+    liste_keys_extruder = []
     for container in containers:
         # type to detect Extruder or Global container analyse getMetaDataEntry("position")
         extruder_position = container.getMetaDataEntry("position")
@@ -102,19 +105,26 @@ def htmlComparePage():
  
             if hasattr(container, "getAllKeys"):
                 keys = list(container.getAllKeys())
-                keys.sort()
                 for key in keys:
                     liste_keys.append(key)
+        else:
+             if hasattr(container, "getAllKeys"):
+                keys = list(container.getAllKeys())
+                for key in keys:
+                    liste_keys_extruder.append(key)           
  
     liste_keys = list(dict.fromkeys(liste_keys))
     liste_keys.sort()
+    liste_keys_extruder = list(dict.fromkeys(liste_keys_extruder))
+    liste_keys_extruder.sort()
+    
     
     html = getHtmlHeader()
 
     # Menu creation
     html += "<div class='menu'>\n"
     
-    html += "<li><a href='#global_stack'>Profil List " + encode(machine_id) + "</a>"
+    html += "<li><a href='#Top_page'>Profil List " + encode(machine_id) + "</a>"
     html += "<ul>\n"
     for profil in Profil_List:
         #
@@ -130,17 +140,17 @@ def htmlComparePage():
         
     # Contents creation
     html += "<div class='contents'>"
-    html += "<h2 id='global_stack'>Complet profiles list</h2>"
+    html += "<h2 id='Top_page'>Complet profiles list</h2>\n"
     short_value_properties = True
  
 
-    html +="<table class=""key_value_table""><thead>"
-    html +="<tr><th>Key</th>"
+    html +="<table class=""key_value_table""><thead>\n"
+    html +="<tr><th>Key</th>\n"
     for profil in Profil_List:
         html +="<th>" + encode(profil)
         html +="<a id='" + str(Container_List[Profil_List.index(profil)]) + "' ></a>"
-        html +="</th>"
-    html +="</tr></thead><tbody>"
+        html +="</th>\n"
+    html +="</tr></thead><tbody>\n"
     
     html += "<tr class='metadata'><td class='key'>definition</td>"
     for container in containers:
@@ -180,7 +190,7 @@ def htmlComparePage():
                     keys.sort()
                     for key in keys:
                         if key == Lkey :
-                            formatted_value = formatSettingValue(container, key, key_properties).value
+                            formatted_value = formatSettingCompareValue(container, key, key_properties).value
                             formatted_key = encode(str(key))
                             Html_td =  "<td class='value'>" + formatted_value + "</td>" 
                 
@@ -190,7 +200,44 @@ def htmlComparePage():
                     html +=  Html_td 
         
         html +=  "</tr>\n"
+    html += tableFooter()
+
+    html +="<table class=""key_value_table_extruder""><thead>\n"
+    html +="<tr><th>Key</th>\n"
+    for profil in Profil_List:
+        html +="<th>" + encode(profil)
+        html +="</th>\n"
+    html +="</tr></thead><tbody>\n"
     
+    for Lkey in liste_keys_extruder:
+        html +=  "<tr class='' --data-key='" + Lkey + "'><td class='key'>&#x1f511; " + Lkey + "</td>"
+        for container in containers:
+            # type to detect Extruder or Global container analyse getMetaDataEntry("position")
+            extruder_position = container.getMetaDataEntry("position")
+            if extruder_position is not None:
+                # 
+                Html_td = ""
+                key_properties = ["value", "resolve"] if short_value_properties else setting_prop_names
+                key_properties.sort()
+
+                # hasattr() method returns true if an object has the given named attribute and false if it does not
+                if hasattr(container, "getAllKeys"):
+                    keys = list(container.getAllKeys())
+                    keys.sort()
+                    for key in keys:
+                        if key == Lkey :
+                            formatted_value = formatSettingCompareValue(container, key, key_properties).value
+                            formatted_key = encode(str(key))
+                            Html_td =  "<td class='value_extruder'>" + formatted_value + "</td>" 
+                
+                if Html_td == "" :
+                    html +=  "<td class='value_extruder'>-</td>" 
+                else:
+                    html +=  Html_td 
+        
+        html +=  "</tr>\n"   
+    
+ 
     html += tableFooter()
 
     html += "</div>"
@@ -454,6 +501,31 @@ def formatSettingValue(container, key, properties=None):
 
     return RawHtml(value)
 
+def formatSettingCompareValue(container, key, properties=None):
+    if properties is None:
+        properties = setting_prop_names
+
+    value = ""
+    #value = "<ul class=\"property_list\">\n"
+    comma = ""
+    properties.sort()
+    for prop_name in properties:
+        prop_value = container.getProperty(key, prop_name)
+        if prop_value is not None:
+            if prop_name=="value" :
+                # repr() function returns a printable representation of the given object
+                print_value = repr(prop_value)
+                if print_value.find("UM.Settings.SettingFunction") > 0 :
+                    strtok_value = print_value.split("=",1)
+                    final_value = "=" + strtok_value[1].replace(" >","")
+                else :
+                    final_value = print_value
+                    
+                value += encode(final_value)
+    #value += "</ul>\n"
+
+    return RawHtml(value)
+    
 def safeCall(callable):
     try:
         result = callable()
@@ -468,7 +540,7 @@ def tableHeader(title):
 """
 
 def tableFooter():
-    return "</tbody></table>"
+    return "</tbody></table>\n"
 
 def formatStringTableRow(key, value, extra_class=""):
     clazz = ""
@@ -612,15 +684,16 @@ div.menu {
   position: fixed;
   padding: 4px;
   left: 0px;
-  width: 25em;
+  width: 22em;
   top: 0px;
   height: 100%;
   box-sizing: border-box;
   overflow: auto;
+  background-color: #ffffff;
 }
 
 div.contents {
-  padding-left: 25em;
+  padding-left: 22em;
 }
 
 table.key_value_table {
@@ -632,6 +705,13 @@ table.key_value_table {
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
   border-spacing: 0px;
+}
+
+table.key_value_table_extruder > thead th {
+  width: 65em;
+  text-align: left;
+  background-color: #428000;
+  color: #ffffff;
 }
 
 table.key_value_table th, table.key_value_table td {
@@ -651,17 +731,26 @@ table.key_value_table > tbody > tr:nth-child(even) {
   background-color: #e0e0e0;
 }
 
+table.key_value_table_extruder > tbody > tr:nth-child(even) {
+  background-color: #e0f0f0;
+}
+
 table.key_value_table > tbody > tr.exception {
   background-color: #e08080;
 }
+
 table.key_value_table td.key {
-  width: 25em;
-  font-weight: bold;
+  width: 22em;
   font-weight: bold;
 }
 
 table.key_value_table tr.preformat td.value {
   white-space: pre;
+}
+
+table.key_value_table tr.preformat td.value_extruder {
+  white-space: pre;
+  background-color: #e0f0f0;
 }
 
 div.container_stack {
