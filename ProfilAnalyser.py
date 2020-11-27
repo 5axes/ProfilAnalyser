@@ -26,6 +26,12 @@ import html
 import json
 import re
 
+from UM.i18n import i18nCatalog
+i18n_cura_catalog = i18nCatalog("cura")
+i18n_catalog = i18nCatalog("fdmprinter.def.json")
+i18n_extrud_catalog = i18nCatalog("fdmextruder.def.json")
+
+
 encode = html.escape
 
 class ProfilAnalyser(Extension, QObject):
@@ -84,7 +90,7 @@ def htmlComparePage():
     # Current machine
     machine_manager = Application.getInstance().getMachineManager()
     global_stack = machine_manager.activeMachine
-    
+    stack = CuraApplication.getInstance().getGlobalContainerStack()
 
     machine_id=global_stack.quality.getMetaData().get("definition", "")   
 
@@ -176,8 +182,14 @@ def htmlComparePage():
     html += "</tr>\n"
 
     for Lkey in liste_keys:
-        html +=  "<tr class='' --data-key='" + Lkey + "'><td class='key'>&#x1f511; " + Lkey + "</td>"
+        untranslated_label=stack.getProperty(Lkey, "label")
+        definition_key=Lkey + " label"
+        translated_label=i18n_catalog.i18nc(definition_key, untranslated_label)
+        untranslated_description=stack.getProperty(Lkey, "description")
+        description_key=Lkey + " description"
+        translated_description=i18n_catalog.i18nc(description_key, untranslated_description)
         
+        html +=  "<tr class='' --data-key='" + translated_label +  "'><td class='CellWithComment'>&#x1f511; " + encode(translated_label) + "<span class='CellComment'>" + translated_description + "</span></td>"    
         for container in containers:
             # type to detect Extruder or Global container analyse getMetaDataEntry("position")
             extruder_position = container.getMetaDataEntry("position")
@@ -218,7 +230,14 @@ def htmlComparePage():
         html +="</tr></thead><tbody>\n"
         
         for Lkey in liste_keys_extruder:
-            html +=  "<tr class='' --data-key='" + Lkey + "'><td class='key'>&#x1f511; " + Lkey + "</td>"
+            untranslated_label=stack.getProperty(Lkey, "label")
+            definition_key=Lkey + " label"
+            translated_label=i18n_catalog.i18nc(definition_key, untranslated_label)
+            untranslated_description=stack.getProperty(Lkey, "description")
+            description_key=Lkey + " description"
+            translated_description=i18n_catalog.i18nc(description_key, untranslated_description)         
+
+            html +=  "<tr class='' --data-key='" + translated_label + "'><td class='CellWithComment'>&#x1f511; " + encode(translated_label) + "<span class='CellComment'>" + translated_description + "</span></td>"    
             for container in containers:
                 # type to detect Extruder or Global container analyse getMetaDataEntry("position")
                 # Could be none type
@@ -274,7 +293,7 @@ def changeToStandardQuality():
         machine_quality_changes = machine_manager.activeMachine.qualityChanges
         machine_id=str(machine_quality_changes.getMetaDataEntry("definition"))
     
-    Logger.log('d', 'First Machine_id : %s', machine_id )    
+    # Logger.log('d', 'First Machine_id : %s', machine_id )    
     containers = ContainerRegistry.getInstance().findInstanceContainers(definition = machine_id, type="quality")
     
     liste_quality = []
@@ -445,6 +464,7 @@ def formatContainer(container, name="Container", short_value_properties=False, s
         html += tableHeader(name + ": " + safeCall(container.getId))
     else :
         html += tableHeader(name + ": " + safeCall(container.getName))
+    
     html += formatContainerMetaDataRows(container)
 
     if show_keys:
@@ -454,7 +474,6 @@ def formatContainer(container, name="Container", short_value_properties=False, s
         # hasattr() method returns true if an object has the given named attribute and false if it does not
         if hasattr(container, "getAllKeys"):
             keys = list(container.getAllKeys())
-            keys.sort()
             for key in keys:
                 html += formatSettingsKeyTableRow(key, formatSettingValue(container, key, key_properties))
 
@@ -485,8 +504,6 @@ def formatContainerMetaDataRows(def_container):
         if hasattr(def_container, "getType"):
             html += formatStringTableRow("type", safeCall(def_container.getType), extra_class="metadata")
 
-        #html += formatKeyValueTableRow("metadata", safeCall(def_container.getMetaData), extra_class="metadata")
-
     except:
         pass
 
@@ -514,12 +531,12 @@ def formatExtruderStacksMenu():
     html += "</ul>"
     return html
 
-def formatContainerStack(stack, show_stack_keys=True):
+def formatContainerStack(Cstack, show_stack_keys=True):
     html = "<div class='container_stack'>\n"
-    html += formatContainer(stack, name="Container Stack", short_value_properties=True)
+    html += formatContainer(Cstack, name="Container Stack", short_value_properties=True)
     html += "<div class='container_stack_containers'>\n"
     html += "<h3>Containers</h3>\n"
-    for container in stack.getContainers():
+    for container in Cstack.getContainers():
         html += formatContainer(container, show_keys=show_stack_keys)
     html += "</div>\n"
     html += "</div>\n"
@@ -640,7 +657,7 @@ def formatKeyValueTableRow(key, value, extra_class=""):
         formatted_key = encode(str(key))
 
     return "<tr class='" + extra_class + " " + clazz + "'><td class='key'>" + formatted_key + "</td><td class='value'>" + formatted_value + "</td></tr>\n"
-
+    
 def formatKeyValueTableRowFile(key, value, extra_class=""):
     clazz = ""
     if isinstance(value, Exception):
@@ -661,9 +678,12 @@ def formatKeyValueTableRowFile(key, value, extra_class=""):
     else:
         formatted_key = encode(str(key))
 
-    return "<tr class='" + extra_class + " " + clazz + "'><td class='key'>" + formatted_key + "</td><td class='value'><a href='" + formatted_value + "'>" + formatted_value + "</a></td></tr>\n"
-    
+    return "<tr class='" + extra_class + " " + clazz + "'><td class='CellWithComment'>" + formatted_key + "</td><td class='value'><a href='" + formatted_value + "'>" + formatted_value + "</a></td></tr>\n"
+
 def formatSettingsKeyTableRow(key, value):
+
+    Cstack = CuraApplication.getInstance().getGlobalContainerStack()
+    
     clazz = ""
     # Test if type Exception
     if isinstance(value, Exception):
@@ -678,9 +698,20 @@ def formatSettingsKeyTableRow(key, value):
         Display_Key = "&#x1F527; "
 
     formatted_key = encode(str(key))
+    
+    Ckey=str(key)
+    
+    untranslated_label=str(Cstack.getProperty(Ckey, "label"))
+    definition_key=Ckey + " label"
+    translated_label=i18n_catalog.i18nc(definition_key, untranslated_label)
+    untranslated_description=str(Cstack.getProperty(Ckey, "description"))
+    description_key=Ckey + " description"
+    translated_description=i18n_catalog.i18nc(description_key, untranslated_description)
+    
     # &#x1f511;  => Key symbole
-    return "<tr class='" + clazz + "' --data-key='" + formatted_key + "'><td class='key'>" + Display_Key + formatted_key + "</td><td class='value'>" + formatted_value + "</td></tr>\n"
+    return "<tr class='" + clazz + "' --data-key='" + translated_label + "'><td class='CellWithComment'>" + Display_Key + translated_label +  "<span class='CellComment'>" + translated_description + "</span></td><td class='value'>" + formatted_value + "</td></tr>\n"
 
+ 
 def keyFilterJS():
     return """
     function initKeyFilter() {
@@ -810,7 +841,7 @@ table.key_value_table > tbody > tr.exception {
 }
 
 table.key_value_table td.key {
-  width: 22em;
+  width: 30em;
   font-weight: bold;
 }
 
@@ -838,6 +869,33 @@ div.container_stack_containers {
   padding: 4px;
   border: 1px dotted black;
   border-radius: 4px;
+}
+
+td.CellWithComment{
+  white-space: pre;
+  width: 30em;
+  font-weight: bold;
+  position:relative;
+}
+
+.CellComment{
+  display:none;
+  position:absolute; 
+  z-index:100;
+  border:1px;
+  background-color:white;
+  border-style:solid;
+  border-width:1px;
+  border-color:blue;
+  padding:3px;
+  color:blue; 
+  top:20px; 
+  left:20px;
+  font-weight: lighter;
+}
+
+td.CellWithComment:hover span.CellComment{
+  display:block;
 }
 
 tr.key_hide {
