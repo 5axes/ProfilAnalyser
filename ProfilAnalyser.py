@@ -889,7 +889,7 @@ td.CellWithComment{
   border-color:blue;
   padding:3px;
   color:blue; 
-  top:20px; 
+  top:30px; 
   left:20px;
   font-weight: lighter;
 }
