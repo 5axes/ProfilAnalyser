@@ -323,7 +323,6 @@ def changeToStandardQuality():
             break
 
     # Logger.log('d', 'New_quality : %s', str(new_quality) )
-    
     global_stack = Application.getInstance().getGlobalContainerStack()
     for container in global_stack.getContainers():
         #
@@ -331,6 +330,7 @@ def changeToStandardQuality():
         if MetaData_quality_type is not None :
             if MetaData_quality_type == "not_supported" :
                 container.setMetaDataEntry("quality_type", new_quality)
+                container.setDirty(True)
                 MetaData_quality_type = container.getMetaDataEntry("quality_type")
                 Logger.log('d', 'New MetaData_quality_type : %s for %s', str(MetaData_quality_type), container.getId() )
             
@@ -362,7 +362,6 @@ def containersOfTypeHtmlPage(name, type_):
     
     # Menu creation
     for container in containers:
-        # Logger.log('d', 'getName : ' + container.getName() )
         if container.getName() == 'empty' :
             html += "<li><a href='#"+ str(id(container)) + "'>"+encode(container.getId())+"</a></li>\n"
         else :
@@ -383,10 +382,6 @@ def containersOfTypeHtmlPage(name, type_):
 
 def formatAllContainersOfType(name, type_):
     html = "<h2>" + name + "</h2>\n"
-
-    #if type_ == "machine":
-    #    containers = ContainerRegistry.getInstance().findDefinitionContainers()
-    #else:
     
     # type "quality_changes" or "user"
     containers = ContainerRegistry.getInstance().findInstanceContainers(type=type_)
