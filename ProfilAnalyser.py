@@ -58,13 +58,14 @@ def htmlPage():
     # Menu creation
     html += "<div class='menu'>\n"
     html += "<ul>"
-    
-    html += "<li><a href='#global_stack'>Global Stack</a>"
-    html += formatContainerStackMenu(Application.getInstance().getGlobalContainerStack())
-    html += "</li>\n"
+ 
 
     html += "<li><a href='#extruder_stacks'>Extruder Stacks</a>\n"
     html += formatExtruderStacksMenu()
+    html += "</li>\n"
+
+    html += "<li><a href='#global_stack'>Global Stack</a>"
+    html += formatContainerStackMenu(Application.getInstance().getGlobalContainerStack())
     html += "</li>\n"
 
     html += "</ul>\n"
@@ -75,11 +76,11 @@ def htmlPage():
 
     # Contents creation
     html += "<div class='contents'>"
+    html += formatExtruderStacks()
+     
     html += "<h2 id='global_stack'>Global Stack</h2>"
     html += formatContainerStack(Application.getInstance().getGlobalContainerStack())
-
-    html += formatExtruderStacks()
-
+    
     html += "</div>"
 
     html += htmlFooter
