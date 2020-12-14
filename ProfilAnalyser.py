@@ -136,23 +136,24 @@ def htmlComparePage():
     # Menu creation
     html += "<div class='menu'>\n"
     
-    html += "<h3><a href='#Top_page'>Profil List " + encode(machine_id) + "</a></h3>"
+    html += "<h3><a href='#Top_page'>Profile List " + encode(machine_id) + "</a></h3>"
     
     html += "<ul>\n"
     for profil in Profil_List:
         #
-        html += "<li><a href='#" + str(Container_List[Profil_List.index(profil)]) + "'>" + encode(profil) + "</a></li>"
+        html += "<li><input type='checkbox' id='chk_" + str(Profil_List.index(profil)) + "' checked onclick='toggleColumnVisibility()'/> <a href='#" + str(Container_List[Profil_List.index(profil)]) + "'>" + encode(profil) + "</a></li>"
             
     html += "</ul>\n"
 
     # Java script filter function
     html += keyFilterWidget()
+    html += toggleDifferencesWidget()
     html += "</div>"
     
         
     # Contents creation
     html += "<div class='contents'>"
-    html += "<h2 id='Top_page'>Complet profiles list</h2>\n"
+    html += "<h2 id='Top_page'>Profiles</h2>\n"
     short_value_properties = True
  
 
@@ -218,15 +219,15 @@ def htmlComparePage():
                     html +=  Html_td 
         
         html +=  "</tr>\n"
-    html += tableFooter()
+    # html += tableFooter()
 
     extruder_count=int(CuraApplication.getInstance().getGlobalContainerStack().getProperty("machine_extruder_count", "value"))
     Logger.log('d', 'extruder_count : %s',extruder_count)
     ind=0
     while ind < extruder_count:
         # Naw Table for Extruder settings
-        html +="<table class=""key_value_table_extruder""><thead>\n"
-        html +="<tr><th>" + encode("Extruder N° " + str(ind)) + "</th>\n"
+        # html +="<table class=""key_value_table_extruder""><thead>\n"
+        html +="<thead><tr><th>" + encode("Extruder N° " + str(ind)) + "</th>\n"
         for profil in Profil_List:
             html +="<th>" + encode(profil)
             html +="</th>\n"
@@ -273,9 +274,10 @@ def htmlComparePage():
             html +=  "</tr>\n"   
         
      
-        html += tableFooter()
+        # html += tableFooter()
         ind += 1
 
+    html += tableFooter()
     html += "</div>"
 
     html += htmlFooter
@@ -749,6 +751,82 @@ def keyFilterWidget():
     </div>
     """
     return html
+    
+def toggleColumnVisibilityJS():
+    return """
+    function toggleColumnVisibility() {
+      var visibleColumns = [];
+      document.querySelectorAll('.menu li').forEach(function(li) {
+        var chk = li.querySelector('input');
+        if(chk.checked) {
+          visibleColumns.push(parseInt(chk.id.replace('chk_', '')));
+        }
+      });
+
+      document.querySelectorAll('tr').forEach(function(row, ridx) {
+        row.querySelectorAll('th, td').forEach(function(col, cidx) {
+          if(cidx === 0) return;
+          if(visibleColumns.includes(cidx-1)) {
+            col.classList.remove('hidden');
+          } else {
+            col.classList.add('hidden');
+          }
+        });
+      });
+      toggleDifferences();
+    }
+    """
+
+def toggleDifferencesWidget():
+    html = """
+    <div class='toggle_differences'>
+    <input type='checkbox' id='toggle_differences' onclick='toggleDifferences()'/> Show only differences
+    </div>
+    """
+    return html
+
+def toggleDifferencesJS():
+    return """
+    function toggleDifferences() {
+      if(document.getElementById('toggle_differences').checked) {        
+        var visibleColumns = [];
+        document.querySelectorAll('.menu li').forEach(function(li) {
+          var chk = li.querySelector('input');
+          if(chk.checked) {
+            visibleColumns.push(parseInt(chk.id.replace('chk_', '')));
+          }
+        })
+
+        document.querySelectorAll('tr').forEach(function(row, ridx) {
+          if(row.querySelector('th')) return;
+	        var currentValue = null;
+  	      var diff = false;
+          row.querySelectorAll('td').forEach(function(col, cidx) {
+            if(cidx === 0) return;
+            if(!visibleColumns.includes(cidx-1)) return;
+            if(currentValue === null) {
+              currentValue = col.innerText;
+            } else {
+              if(col.innerText != currentValue) {
+                diff = true;
+                return;
+              }
+            }
+          });
+
+          if(diff) {
+            row.classList.remove('hidden');
+          } else {
+            row.classList.add('hidden');
+          }
+        });
+      } else {
+        document.querySelectorAll('tr').forEach(function(row, idx) {
+          row.classList.remove('hidden');
+        });
+      }
+    }
+    """
 
 def openHtmlPage(page_name, html_contents):
     target = os.path.join(tempfile.gettempdir(), page_name)
@@ -763,6 +841,8 @@ def getHtmlHeader(page_name="Cura Settings"):
 <title>""" + encode(page_name) + """</title>
 <script>
 """ + keyFilterJS() + """
+""" + toggleDifferencesJS() + """
+""" + toggleColumnVisibilityJS() + """
 </script>
 <style>
 html {
@@ -807,7 +887,6 @@ table.key_value_table {
 }
 
 table.key_value_table_extruder > thead th {
-  width: 65em;
   text-align: left;
   background-color: #428000;
   color: #ffffff;
@@ -818,7 +897,6 @@ table.key_value_table th, table.key_value_table td {
 }
 
 table.key_value_table > thead th {
-  width: 65em;
   text-align: left;
   background-color: #428bca;
   color: #ffffff;
@@ -839,7 +917,6 @@ table.key_value_table > tbody > tr.exception {
 }
 
 table.key_value_table td.key {
-  width: 30em;
   font-weight: bold;
 }
 
@@ -871,7 +948,6 @@ div.container_stack_containers {
 
 td.CellWithComment{
   white-space: pre;
-  width: 30em;
   font-weight: bold;
   position:relative;
 }
@@ -912,6 +988,9 @@ ul.property_list {
 
 span.prop_name {
   font-weight: bold;
+}
+tr.hidden, td.hidden, th.hidden {
+  display: none;
 }
 </style>
 </head>
