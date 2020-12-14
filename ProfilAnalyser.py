@@ -869,6 +869,7 @@ div.menu {
   box-sizing: border-box;
   overflow: auto;
   background-color: #ffffff;
+  z-index: 100;
 }
 
 div.contents {
