@@ -7,6 +7,7 @@
 #
 # 29/11/2020 Modifications order
 # 14/12/2020 Add filter on Profils and Function show only difference thanks to csakip (https://github.com/csakip)
+# 14/12/2020 Add Function Unselect ALL
 #
 from UM.Settings.DefinitionContainer import DefinitionContainer
 from UM.Settings.SettingDefinition import SettingDefinition
@@ -42,8 +43,8 @@ class ProfilAnalyser(Extension, QObject):
         QObject.__init__(self, parent)
         Extension.__init__(self)
 
-        self.addMenuItem("View Active Configuration", viewAll)
         self.addMenuItem("View Profil Analyse", viewCompare)
+        self.addMenuItem("View Active Configuration", viewAll)
         self.addMenuItem("View All Current Printer Profiles", viewAllPrinterQualityChanges)
         self.addMenuItem("Set to Standard Quality", changeToStandardQuality)
         # self.addMenuItem("View All User Containers", viewAllUserContainers)
@@ -150,11 +151,11 @@ def htmlComparePage():
     html += keyUnselectAllWidget()
     html += keyFilterWidget()
     html += toggleDifferencesWidget()
-    html += "</div>"
+    html += "</div>\n"
     
         
     # Contents creation
-    html += "<div class='contents'>"
+    html += "\n<div class='contents'>\n"
     html += "<h2 id='Top_page'>Profiles</h2>\n"
     short_value_properties = True
  
@@ -803,6 +804,7 @@ def toggleUnselectAllJS():
         var chk = li.querySelector('input');
 			  chk.checked =  !document.getElementById('unselect_all').checked;
 		})
+      toggleColumnVisibility();
 	}
     """
     return html
