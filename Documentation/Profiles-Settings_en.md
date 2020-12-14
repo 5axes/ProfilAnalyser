@@ -1,6 +1,6 @@
 # Profiles &amp; Settings
 
-*Jaime van Kessel edited this page Aug 13, 2020  2 revisions*
+*[Origine document ](https://github.com/Ultimaker/Cura/wiki/Profiles-&-Settings) by Jaime van Kessel*
 
 Cura uses a stacked profile system. A schematic overview of this can be seen in the image below.
 
