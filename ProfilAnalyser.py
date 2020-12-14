@@ -147,6 +147,7 @@ def htmlComparePage():
     html += "</ul>\n"
 
     # Java script filter function
+    html += keyUnselectAllWidget()
     html += keyFilterWidget()
     html += toggleDifferencesWidget()
     html += "</div>"
@@ -752,6 +753,15 @@ def keyFilterWidget():
     </div>
     """
     return html
+
+def keyUnselectAllWidget():
+    html = """
+    <div class='toggle_differences'>
+    <input type='checkbox' id='unselect_all' onclick='UnselectAll()'/> Unselect all
+	</div>
+    <br>
+    """
+    return html
     
 def toggleColumnVisibilityJS():
     return """
@@ -783,6 +793,17 @@ def toggleDifferencesWidget():
     <div class='toggle_differences'>
     <input type='checkbox' id='toggle_differences' onclick='toggleDifferences()'/> Show only differences
     </div>
+    """
+    return html
+    
+def toggleUnselectAllJS():
+    html = """
+    function UnselectAll() {
+      document.querySelectorAll('.menu li').forEach(function(li) {
+        var chk = li.querySelector('input');
+			  chk.checked =  !document.getElementById('unselect_all').checked;
+		})
+	}
     """
     return html
 
@@ -842,6 +863,7 @@ def getHtmlHeader(page_name="Cura Settings"):
 <title>""" + encode(page_name) + """</title>
 <script>
 """ + keyFilterJS() + """
+""" + toggleUnselectAllJS() + """
 """ + toggleDifferencesJS() + """
 """ + toggleColumnVisibilityJS() + """
 </script>
