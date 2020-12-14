@@ -6,6 +6,7 @@
 # 5Axes  limit analyse to user Profil debuging
 #
 # 29/11/2020 Modifications order
+# 14/12/2020 Add filter on Profils and Function show only difference thanks to csakip (https://github.com/csakip)
 #
 from UM.Settings.DefinitionContainer import DefinitionContainer
 from UM.Settings.SettingDefinition import SettingDefinition
