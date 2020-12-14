@@ -3,7 +3,7 @@ Cura profil analyser ( initialy based on the GodMod Plugin https://github.com/se
 
 Plugin for Cura to analyse the Cura profiles configuration much easier.
 
-This plugins lets you dump the contents of the curent global and extruder settings stacks to a HTML page which opens up in your default browser. There you can inspect the values and also filter the list of settings.
+This plugins lets you dump the contents of the curent global and extruder settings stacks to an HTML page which opens up in your default browser. There you can inspect the values and also filter the list of settings.
 
 To install just copy the ProfilAnalyser directory into the plugins directory in your Cura plugins directory.
 
