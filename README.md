@@ -9,6 +9,10 @@ To install just copy the ProfilAnalyser directory into the plugins directory in 
 
 Once Cura is running you can find the plugin in the Extensions menu -> Profil Analyser.
 
-Version 1.1.0
---
+### Version 1.1.0
+
 Thanks to the csakip contribution (https://github.com/csakip) possibility to show only differents between profiles and select profiles to compare.
+
+### Version 1.1.1
+
+Add Widget unselect all in the compare HTML page.
