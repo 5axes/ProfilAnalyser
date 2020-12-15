@@ -6,8 +6,9 @@
 # 5Axes  limit analyse to user Profil debuging
 #
 # 29/11/2020 Modifications order
-# 14/12/2020 Add filter on Profils and Function show only difference thanks to csakip (https://github.com/csakip)
-# 14/12/2020 Add Function Unselect ALL
+# V 1.1.0  14/12/2020 Add filter on Profils and Function show only difference thanks to csakip (https://github.com/csakip)
+# V 1.1.1  14/12/2020 Add Function Unselect ALL
+# V 1.1.2  15/12/2020 Add filter on valued parameters
 #
 from UM.Settings.DefinitionContainer import DefinitionContainer
 from UM.Settings.SettingDefinition import SettingDefinition
@@ -151,6 +152,7 @@ def htmlComparePage():
     html += keyUnselectAllWidget()
     html += keyFilterWidget()
     html += toggleDifferencesWidget()
+    html += toggleNullValueWidget()
     html += "</div>\n"
     
         
@@ -763,6 +765,15 @@ def keyUnselectAllWidget():
     <br>
     """
     return html
+
+def toggleNullValueWidget():
+    html = """
+	<div class='toggle_differences'>
+    <input type='checkbox' id='toggle_nullvalue' onclick='toggleNullValue()'/> Show only valued parameters
+    </div>
+    
+    """
+    return html
     
 def toggleColumnVisibilityJS():
     return """
@@ -791,6 +802,7 @@ def toggleColumnVisibilityJS():
 
 def toggleDifferencesWidget():
     html = """
+    <br>
     <div class='toggle_differences'>
     <input type='checkbox' id='toggle_differences' onclick='toggleDifferences()'/> Show only differences
     </div>
@@ -805,6 +817,7 @@ def toggleUnselectAllJS():
 			  chk.checked =  !document.getElementById('unselect_all').checked;
 		})
       toggleColumnVisibility();
+      toggleNullValue();
 	}
     """
     return html
@@ -812,7 +825,8 @@ def toggleUnselectAllJS():
 def toggleDifferencesJS():
     return """
     function toggleDifferences() {
-      if(document.getElementById('toggle_differences').checked) {        
+      if(document.getElementById('toggle_differences').checked) {
+        document.getElementById('toggle_nullvalue').checked = false;
         var visibleColumns = [];
         document.querySelectorAll('.menu li').forEach(function(li) {
           var chk = li.querySelector('input');
@@ -852,6 +866,46 @@ def toggleDifferencesJS():
     }
     """
 
+def toggleNullValueJS():
+    return """
+    function toggleNullValue() {
+      if(document.getElementById('toggle_nullvalue').checked) {
+        document.getElementById('toggle_differences').checked = false;
+        var visibleColumns = [];
+        document.querySelectorAll('.menu li').forEach(function(li) {
+          var chk = li.querySelector('input');
+          if(chk.checked) {
+            visibleColumns.push(parseInt(chk.id.replace('chk_', '')));
+          }
+        })
+
+        document.querySelectorAll('tr').forEach(function(row, ridx) {
+          if(row.querySelector('th')) return;
+	        var currentValue = null;
+  	      var diff = false;
+          row.querySelectorAll('td').forEach(function(col, cidx) {
+            if(cidx === 0) return;
+            if(!visibleColumns.includes(cidx-1)) return;
+			  if(col.innerText != "-") {
+				diff = true;
+				return;
+			  }
+          });
+
+          if(diff) {
+            row.classList.remove('hidden');
+          } else {
+            row.classList.add('hidden');
+          }
+        });
+      } else {
+        document.querySelectorAll('tr').forEach(function(row, idx) {
+          row.classList.remove('hidden');
+        });
+      }
+    } 
+    """
+    
 def openHtmlPage(page_name, html_contents):
     target = os.path.join(tempfile.gettempdir(), page_name)
     with open(target, "w", encoding="utf-8") as fhandle:
@@ -867,6 +921,7 @@ def getHtmlHeader(page_name="Cura Settings"):
 """ + keyFilterJS() + """
 """ + toggleUnselectAllJS() + """
 """ + toggleDifferencesJS() + """
+""" + toggleNullValueJS() + """
 """ + toggleColumnVisibilityJS() + """
 </script>
 <style>
