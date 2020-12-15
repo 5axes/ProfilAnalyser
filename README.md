@@ -17,8 +17,14 @@ Thanks to the csakip contribution (https://github.com/csakip) possibility to sho
 
 Add Widget unselect all in the compare HTML page.
 
+### Version 1.1.2
 
-Note : JScript used in the Html page have been succesfuly tested on :
+Add widget "Show only valued parameters".
+
+
+## Browser Javascript compatibility
+
+JScript used in the Html page have been succesfuly tested on :
 - Google Chrome  (64 bits)
 - Microsoft Edge (64 bits)
 
