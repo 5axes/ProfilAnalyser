@@ -16,3 +16,11 @@ Thanks to the csakip contribution (https://github.com/csakip) possibility to sho
 ### Version 1.1.1
 
 Add Widget unselect all in the compare HTML page.
+
+
+Note : JScript used in the Html page have been succesfuly tested on :
+- Google Chrome  (64 bits)
+- Microsoft Edge (64 bits)
+
+
+- IE 11 and previous release ? : not supported
