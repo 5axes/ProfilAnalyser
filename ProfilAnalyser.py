@@ -721,6 +721,7 @@ def keyFilterJS():
     return """
     function initKeyFilter() {
       var filter = document.getElementById('key_filter');
+      document.getElementById('toggle_nullvalue').checked =true;
       filter.addEventListener('change', function() {
         var filterValue = filter.value;
 
