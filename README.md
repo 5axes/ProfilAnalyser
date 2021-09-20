@@ -21,7 +21,7 @@ Add Widget unselect all in the compare HTML page.
 
 Add widget "Show only valued parameters".
 
-### Version 1.1.2
+### Version 1.1.3
 
 Change text separator for filtering option
 
