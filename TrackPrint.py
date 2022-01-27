@@ -79,7 +79,7 @@ def htmlPage(page_name):
     html += writeTd("Date",cDa)
         # platform
     pLatf = str(platform.system()) + " " + str(platform.version())
-    html += writeTd("Os",pLatf))
+    html += writeTd("Os",pLatf)
         
     # html += '<h2 id="global_stack">Global Stack</h2>'
     # html += formatContainerStack(Application.getInstance().getGlobalContainerStack())
@@ -97,7 +97,7 @@ def writeTd(Key,ValStr):
     html_td += "</td>"
     html_td += "<td colspan='2'>"
     html_td += str(ValStr) 
-    html_td +=         "</td>"
+    html_td += "</td>"
     html_td +="</tr>\n"
     return html_td
    
@@ -154,26 +154,7 @@ def formatContainerMetaDataRows(def_container):
 
     return html
     
-def formatExtruderStacks():
-    html = ''
-    html += '<h2 id="extruder_stacks">Extruder Stacks</h2>'
-    machine = Application.getInstance().getMachineManager().activeMachine
-    for position, extruder_stack in sorted([(int(p), es) for p, es in machine.extruders.items()]):
-        position = str(position)
-        html += '<h3 id="extruder_index_' + position + '">Index ' + position + '</h3>'
-        # html += formatContainerStack(extruder_stack)
-    return html
 
-def formatContainerStack(Cstack, show_stack_keys=True):
-    html = '<div class="container_stack">\n'
-    html += formatContainer(Cstack, name='Container Stack', short_value_properties=True)
-    html += '<div class="container_stack_containers">\n'
-    html += '<h3>Containers</h3>\n'
-    for container in Cstack.getContainers():
-        html += formatContainer(container, show_keys=show_stack_keys)
-    html += '</div>\n'
-    html += '</div>\n'
-    return html
 
 
 setting_prop_names = SettingDefinition.getPropertyNames()
