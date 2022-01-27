@@ -61,23 +61,45 @@ def viewAll():
     
 def htmlPage(page_name):
 
-    target = os.path.join(tempfile.gettempdir(), page_name)
-    Logger.log("d", "Fichier : " + target)
+    path = os.path.join(tempfile.gettempdir(), page_name)
     
-    html = getHtmlHeader()
-
-    # Contents creation
-    html += '<div class="contents">'
-    html += formatExtruderStacks()
-     
+    result = os.path.isfile(path)
+    
+    if result == False :
+        Logger.log("d", "Fichier : " + path)
+        html = getHtmlHeader()
+    
+    # os.path.abspath(stream.name)
+   
+    html = tableHeader("Name")
+    # File
+    # self._WriteTd(stream,"File",os.path.abspath(stream.name))
+    # Date
+    cDa = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    html += writeTd("Date",cDa)
+        # platform
+    pLatf = str(platform.system()) + " " + str(platform.version())
+    html += writeTd("Os",pLatf))
+        
     # html += '<h2 id="global_stack">Global Stack</h2>'
     # html += formatContainerStack(Application.getInstance().getGlobalContainerStack())
     
-    html += '</div>'
+    html += tableFooter()
 
     html += htmlFooter
     return html
-   
+ 
+def writeTd(Key,ValStr):
+
+    html_td = "<tr>"
+    html_td += "<td class='w-50'>" 
+    html_td += Key
+    html_td += "</td>"
+    html_td += "<td colspan='2'>"
+    html_td += str(ValStr) 
+    html_td +=         "</td>"
+    html_td +="</tr>\n"
+    return html_td
    
 def formatContainer(container, name='Container', short_value_properties=False, show_keys=True):
     html = ''
