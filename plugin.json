@@ -1,8 +1,8 @@
 {
-    "name": "TrackPrint",
+    "name": "Profil Analyser",
     "author": "5@xes",
-    "version": "1.0.1",
-    "description": "Keep A track on your computer of your Print.",
+    "version": "1.1.3",
+    "description": "Dump the contents of the profil settings to an HTML file.",
     "api": "7.0",
-    "supported_sdk_versions": ["6.0.0", "7.0.0", "7.1.0", "7.2.0", "7.3.0", "7.4.0", "7.5.0", "7.6.0", "7.7.0", "7.8.0", "7.9.0"]
+    "supported_sdk_versions": ["6.0.0", "7.0.0", "7.1.0", "7.2.0", "7.3.0", "7.4.0", "7.5.0", "7.6.0"]
 }

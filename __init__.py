@@ -1,7 +1,7 @@
-# Copyright (c) 2022 5@xes.
+# Copyright (c) 2020 5@xes.
 # Cura is released under the terms of the AGPLv3 or higher.
 
-from . import TrackPrint
+from . import ProfilAnalyser
 
 from UM.i18n import i18nCatalog
 catalog = i18nCatalog("cura")
@@ -9,10 +9,10 @@ catalog = i18nCatalog("cura")
 def getMetaData():
     return {
         "view": {
-            "name": "TrackPrint",
+            "name": "ProfilAnalyser",
             "weight": 1
         }
     }
 
 def register(app):
-    return {"extension": TrackPrint.TrackPrint()}
+    return {"extension": ProfilAnalyser.ProfilAnalyser()}
