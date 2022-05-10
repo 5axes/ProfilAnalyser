@@ -1,4 +1,4 @@
-# Copyright (c) 2020 5@xes.
+# Copyright (c) 2022 5@xes.
 # Cura is released under the terms of the AGPLv3 or higher.
 
 from . import ProfilAnalyser

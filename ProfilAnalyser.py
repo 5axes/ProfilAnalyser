@@ -1,10 +1,11 @@
 #-----------------------------------------------------------------------------------------------------------------------------
-# Copyright (c) 2016 Ultimaker B.V.
+# Copyright (c) 2022 5@xes
+# Initial Copyright (c) 2016 Ultimaker B.V.
 # Cura is released under the terms of the AGPLv3 or higher.
 # Initial source code cura-god-mode-plugin from sedwards2009
 # https://github.com/sedwards2009/cura-god-mode-plugin
 #
-# 5Axes  limit analyse to user Profil debuging
+# 5@xes  limit analyse to user Profil debuging
 #
 # 29/11/2020 Modifications order
 # V 1.1.0  14/12/2020 Add filter on Profils and Function show only difference thanks to csakip (https://github.com/csakip)
@@ -12,7 +13,18 @@
 # V 1.1.2  15/12/2020 Add filter on valued parameters
 # V 1.1.3  20/09/2021 replace ' by " for filtering option
 #
+# V 1.2.0  01/05/2022 Update for Cura 5.0
 #-----------------------------------------------------------------------------------------------------------------------------
+
+VERSION_QT5 = False
+try:
+    from PyQt6.QtCore import QObject, QUrl
+    from PyQt6.QtGui import QDesktopServices
+except ImportError:
+    from PyQt5.QtCore import QObject, QUrl
+    from PyQt5.QtGui import QDesktopServices
+    VERSION_QT5 = True
+    
 
 from UM.Settings.DefinitionContainer import DefinitionContainer
 from UM.Settings.SettingDefinition import SettingDefinition
@@ -26,9 +38,6 @@ from cura.CuraApplication import CuraApplication
 from UM.Logger import Logger
 from UM.Message import Message
 
-from PyQt5.QtCore import QObject, QUrl
-from PyQt5.QtGui import QDesktopServices
-
 import os.path
 import tempfile
 import html
@@ -40,7 +49,6 @@ i18n_cura_catalog = i18nCatalog('cura')
 i18n_catalog = i18nCatalog('fdmprinter.def.json')
 i18n_extrud_catalog = i18nCatalog('fdmextruder.def.json')
 
-
 encode = html.escape
 
 class ProfilAnalyser(Extension, QObject):
@@ -51,7 +59,7 @@ class ProfilAnalyser(Extension, QObject):
         self.addMenuItem('View Profil Analyse', viewCompare)
         self.addMenuItem('View Active Configuration', viewAll)
         self.addMenuItem('View All Current Printer Profiles', viewAllPrinterQualityChanges)
-        self.addMenuItem('Set to Standard Quality', changeToStandardQuality)
+        # self.addMenuItem('Set to Standard Quality', changeToStandardQuality)
         # self.addMenuItem('View All User Containers', viewAllUserContainers)
         # self.addMenuItem('View All Profiles', viewAllQualityChanges)
 
@@ -102,7 +110,8 @@ def htmlComparePage():
     global_stack = machine_manager.activeMachine
     stack = CuraApplication.getInstance().getGlobalContainerStack()
 
-    machine_id=global_stack.quality.getMetaData().get('definition', '')   
+    machine_id=global_stack.quality.getMetaData().get('definition', '') 
+    Logger.log("d", "HtmlComparePage machine_id = " + machine_id)    
 
     containers = ContainerRegistry.getInstance().findInstanceContainers(definition = machine_id, type='quality_changes')
 
@@ -114,11 +123,13 @@ def htmlComparePage():
     Container_List = []
     liste_keys = []
     liste_keys_extruder = []
+    
+    # Logger.log("d", "Before container")
     for container in containers:
         # type to detect Extruder or Global container analyse getMetaDataEntry('position')
         extruder_position = container.getMetaDataEntry('position')
         if extruder_position is None:
-            #Logger.log("d", "global : " + container.getId())
+            # Logger.log("d", "global : " + container.getId())
             Profil_List.append(container.getName())
             Container_List.append(str(id(container)))
  
@@ -195,13 +206,16 @@ def htmlComparePage():
     html += '</tr>\n'
 
     for Lkey in liste_keys:
-        untranslated_label=stack.getProperty(Lkey, 'label')
-        definition_key=Lkey + ' label'
-        translated_label=i18n_catalog.i18nc(definition_key, untranslated_label)
-        untranslated_description=stack.getProperty(Lkey, 'description')
-        description_key=Lkey + ' description'
-        translated_description=i18n_catalog.i18nc(description_key, untranslated_description)
-        
+        try:
+            untranslated_label=stack.getProperty(Lkey, 'label')
+            definition_key=Lkey + ' label'
+            translated_label=i18n_catalog.i18nc(definition_key, untranslated_label)
+            untranslated_description=stack.getProperty(Lkey, 'description')
+            description_key=Lkey + ' description'
+            translated_description=i18n_catalog.i18nc(description_key, untranslated_description)
+        except ValueError:
+            continue    
+            
         html +=  '<tr class="" --data-key="' + translated_label +  '"><td class="CellWithComment">&#x1f511; ' + encode(translated_label) + '<span class="CellComment">' + translated_description + '</span></td>'    
         for container in containers:
             # type to detect Extruder or Global container analyse getMetaDataEntry('position')
@@ -231,7 +245,7 @@ def htmlComparePage():
     # html += tableFooter()
 
     extruder_count=int(CuraApplication.getInstance().getGlobalContainerStack().getProperty('machine_extruder_count', 'value'))
-    Logger.log("d", "extruder_count : %s",extruder_count)
+    # Logger.log("d", "extruder_count : %s",extruder_count)
     ind=0
     while ind < extruder_count:
         # Naw Table for Extruder settings
@@ -241,47 +255,62 @@ def htmlComparePage():
             html +='<th>' + encode(profil)
             html +='</th>\n'
         html +='</tr></thead><tbody>\n'
-        
-        for Lkey in liste_keys_extruder:
-            untranslated_label=stack.getProperty(Lkey, 'label')
-            definition_key=Lkey + ' label'
-            translated_label=i18n_catalog.i18nc(definition_key, untranslated_label)
-            untranslated_description=stack.getProperty(Lkey, 'description')
-            description_key=Lkey + ' description'
-            translated_description=i18n_catalog.i18nc(description_key, untranslated_description)         
+        try:        
+            for Lkey in liste_keys_extruder:
+                # Logger.log("d", "Lkey : %s",Lkey)
+                definition_key=Lkey + ' label'
+                description_key=Lkey + ' description'
+                try:
+                    untranslated_label=stack.getProperty(Lkey, 'label')
+                    translated_label=i18n_catalog.i18nc(definition_key, untranslated_label)
+                    untranslated_description=stack.getProperty(Lkey, 'description')
+                    translated_description=i18n_catalog.i18nc(description_key, untranslated_description) 
+                    html +=  '<tr class="" --data-key="' + translated_label + '"><td class="CellWithComment">&#x1f511; ' + encode(translated_label) + '<span class="CellComment">' + translated_description + '</span></td>'        
+                except:
+                    Logger.log("d", "Translated_label ERROR on Lkey : %s",Lkey)
+                    translated_label=Lkey
+                    untranslated_label=Lkey
+                    translated_description='Description ' + Lkey + ' Not found'
+                    untranslated_description='Description ' + Lkey + ' Not found'
+                    html +=  '<tr class="" --data-key="' + translated_label + '"><td class="CellWithError">&#x1f511; ' + encode(translated_label) + '<span class="CellComment">' + translated_description + '</span></td>'
+                    html +=  '<td class="value_extruder">-</td>' 
+                    
+                    continue 
+                    
+                for container in containers:
+                    # type to detect Extruder or Global container analyse getMetaDataEntry('position')
+                    # Could be none type
+                    extruder_position = container.getMetaDataEntry('position')
+                    if extruder_position is not None:
+                        # Logger.log("d", "extruder_position : %s",extruder_position)
+                        Extrud_Nb=int(extruder_position)
+                        if Extrud_Nb == ind :                 
+                            # 
+                            Html_td = ''
+                            key_properties = ['value', 'resolve'] if short_value_properties else setting_prop_names
+                            key_properties.sort()
 
-            html +=  '<tr class="" --data-key="' + translated_label + '"><td class="CellWithComment">&#x1f511; ' + encode(translated_label) + '<span class="CellComment">' + translated_description + '</span></td>'    
-            for container in containers:
-                # type to detect Extruder or Global container analyse getMetaDataEntry('position')
-                # Could be none type
-                extruder_position = container.getMetaDataEntry('position')
-                if extruder_position is not None:
-                    # Logger.log("d", "extruder_position : %s",extruder_position)
-                    # Logger.log("d", "extruder_position : %s",ind)
-                    Extrud_Nb=int(extruder_position)
-                    if Extrud_Nb == ind :                 
-                        # 
-                        Html_td = ''
-                        key_properties = ['value', 'resolve'] if short_value_properties else setting_prop_names
-                        key_properties.sort()
+                            # hasattr() method returns true if an object has the given named attribute and false if it does not
+                            if hasattr(container, 'getAllKeys'):
+                                keys = list(container.getAllKeys())
+                                keys.sort()
+                                for key in keys:
+                                    if key == Lkey :
+                                        # Logger.log("d", "Key -> Lkey : %s",key)
+                                        formatted_value = formatSettingCompareValue(container, key, key_properties).value
+                                        formatted_key = encode(str(key))
+                                        Html_td =  '<td class="value_extruder">' + formatted_value + '</td>' 
+                            
+                            if Html_td == '' :
+                                html +=  '<td class="value_extruder">-</td>' 
+                            else:
+                                html +=  Html_td 
 
-                        # hasattr() method returns true if an object has the given named attribute and false if it does not
-                        if hasattr(container, 'getAllKeys'):
-                            keys = list(container.getAllKeys())
-                            keys.sort()
-                            for key in keys:
-                                if key == Lkey :
-                                    formatted_value = formatSettingCompareValue(container, key, key_properties).value
-                                    formatted_key = encode(str(key))
-                                    Html_td =  '<td class="value_extruder">' + formatted_value + '</td>' 
-                        
-                        if Html_td == '' :
-                            html +=  '<td class="value_extruder">-</td>' 
-                        else:
-                            html +=  Html_td 
-            
-            html +=  '</tr>\n'   
-        
+                    
+                html +=  '</tr>\n'   
+        except:
+            Logger.log("d", "htmlComparePage ERROR on Lkey : %s",Lkey)
+            pass       
      
         # html += tableFooter()
         ind += 1
@@ -290,6 +319,8 @@ def htmlComparePage():
     html += '</div>'
 
     html += htmlFooter
+    
+    Logger.log("d", "htmlComparePage : Fin")
     return html
     
 def viewAllUserContainers():
@@ -521,22 +552,27 @@ def formatContainerMetaDataRows(def_container):
 def formatExtruderStacks():
     html = ''
     html += '<h2 id="extruder_stacks">Extruder Stacks</h2>'
-    machine = Application.getInstance().getMachineManager().activeMachine
-    for position, extruder_stack in sorted([(int(p), es) for p, es in machine.extruders.items()]):
-        position = str(position)
-        html += '<h3 id="extruder_index_' + position + '">Index ' + position + '</h3>'
+    # machine = Application.getInstance().getMachineManager().activeMachine
+    # for position, extruder_stack in sorted([(int(p), es) for p, es in machine.extruders.items()]):
+    position=0
+    for extruder_stack in Application.getInstance().getExtruderManager().getActiveExtruderStacks():
+        html += '<h3 id="extruder_index_' + str(position) + '">Index ' + str(position) + '</h3>'
         html += formatContainerStack(extruder_stack)
+        position += 1
     return html
 
 def formatExtruderStacksMenu():
     html = ''
     html += '<ul>'
-    machine = Application.getInstance().getMachineManager().activeMachine
-    for position, extruder_stack in sorted([(int(p), es) for p, es in machine.extruders.items()]):
+    # machine = Application.getInstance().getMachineManager().activeMachine
+    # for position, extruder_stack in sorted([(int(p), es) for p, es in machine.extruders.items()]):
+    position=0
+    for extruder_stack in Application.getInstance().getExtruderManager().getActiveExtruderStacks():
         html += '<li>'
         html += '<a href="#extruder_index_' + str(position) + '">Index ' + str(position) + '</a>\n'
         html += formatContainerStackMenu(extruder_stack)
         html += '</li>'
+        position += 1
     html += '</ul>'
     return html
 
@@ -1037,6 +1073,13 @@ td.CellWithComment{
   position:relative;
 }
 
+td.CellWithError{
+  white-space: pre;
+  font-weight: bold;
+  position:relative;
+  background-color: #c92b12;
+}
+
 .CellComment{
   display:none;
   position:absolute; 
@@ -1054,6 +1097,10 @@ td.CellWithComment{
 }
 
 td.CellWithComment:hover span.CellComment{
+  display:block;
+}
+
+td.CellWithError:hover span.CellComment{
   display:block;
 }
 
