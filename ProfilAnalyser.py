@@ -1135,4 +1135,3 @@ htmlFooter = '''</body>
 class RawHtml:
     def __init__(self, value):
         self.value = value
-
