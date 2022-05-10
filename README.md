@@ -25,6 +25,11 @@ Add widget "Show only valued parameters".
 
 Change text separator for filtering option
 
+### Version 1.2.0
+
+Compatibility Cura 5.0
+
+
 ## Browser Javascript compatibility
 
 JScript used in the Html page have been succesfuly tested on :
