@@ -14,6 +14,7 @@
 # V 1.1.3  20/09/2021 replace ' by " for filtering option
 #
 # V 1.2.0  01/05/2022 Update for Cura 5.0
+# V 1.2.1  10/05/2022 Add Version
 #-----------------------------------------------------------------------------------------------------------------------------
 
 VERSION_QT5 = False
@@ -31,6 +32,9 @@ from UM.Settings.SettingDefinition import SettingDefinition
 from UM.Extension import Extension
 from UM.Application import Application
 from UM.Settings.ContainerRegistry import ContainerRegistry
+
+from cura.CuraVersion import CuraVersion  # type: ignore
+# from UM.Version import Version
 
 from cura.CuraApplication import CuraApplication
 
@@ -58,16 +62,24 @@ class ProfilAnalyser(Extension, QObject):
 
         self.addMenuItem('View Profil Analyse', viewCompare)
         self.addMenuItem('View Active Configuration', viewAll)
-        self.addMenuItem('View All Current Printer Profiles', viewAllPrinterQualityChanges)
+        self.addMenuItem('View All Current Printer Profiles', viewAllQualityChanges)
         # self.addMenuItem('Set to Standard Quality', changeToStandardQuality)
-        # self.addMenuItem('View All User Containers', viewAllUserContainers)
-        # self.addMenuItem('View All Profiles', viewAllQualityChanges)
 
 def viewAll():
-    openHtmlPage('cura_settings.html', htmlPage())
+    HtmlFile = str(CuraVersion).replace('.','-') + '_cura_settings.html'
+    openHtmlPage(HtmlFile, htmlPage())
 
 def viewCompare():
-    openHtmlPage('cura_settings.html', htmlComparePage())
+    HtmlFile = str(CuraVersion).replace('.','-') + '_cura_settings_compare.html'
+    openHtmlPage(HtmlFile, htmlComparePage())
+
+def viewAllQualityChanges():
+    HtmlFile = str(CuraVersion).replace('.','-') + '_cura_quality_changes.html'
+    machine_manager = Application.getInstance().getMachineManager()
+    global_stack = machine_manager.activeMachine
+    machine_id=global_stack.quality.getMetaData().get('definition', '')    
+    # Logger.log("d", "viewAllQualityChanges : " + machine_id )
+    openHtmlPage(HtmlFile, containersOfTypeHtmlPage('Printer Quality Changes', 'quality_changes', machine_id ))
     
 def htmlPage():
     html = getHtmlHeader()
@@ -309,7 +321,7 @@ def htmlComparePage():
                     
                 html +=  '</tr>\n'   
         except:
-            Logger.log("d", "htmlComparePage ERROR on Lkey : %s",Lkey)
+            Logger.log("d", "HtmlComparePage ERROR on Lkey : %s",Lkey)
             pass       
      
         # html += tableFooter()
@@ -320,11 +332,8 @@ def htmlComparePage():
 
     html += htmlFooter
     
-    Logger.log("d", "htmlComparePage : Fin")
+    Logger.log("d", "HtmlComparePage : Fin")
     return html
-    
-def viewAllUserContainers():
-    openHtmlPage('cura_user_containers.html', containersOfTypeHtmlPage('User Containers', 'user'))
 
 # Change the 'quality_type' to 'standard' if 'not_supported'
 def changeToStandardQuality():
@@ -378,68 +387,10 @@ def changeToStandardQuality():
                 container.setDirty(True)
                 MetaData_quality_type = container.getMetaDataEntry('quality_type')
                 Logger.log("d", "New MetaData_quality_type : %s for %s", str(MetaData_quality_type), container.getId() )
-            
-    
-def viewAllPrinterQualityChanges():
-    #stack = Application.getInstance().getGlobalContainerStack()
-    machine_manager = Application.getInstance().getMachineManager()
-    global_stack = machine_manager.activeMachine
-    machine_id=global_stack.quality.getMetaData().get('definition', '')    
-    # Logger.log("d", "viewAllPrinterQualityChanges : " + machine_id )
-    openHtmlPage('cura_quality_changes.html', containersOfTypeHtmlPage2('Printer Quality Changes', 'quality_changes', machine_id ))
-    
-def viewAllQualityChanges():
-    openHtmlPage('cura_quality_changes.html', containersOfTypeHtmlPage('Quality Changes', 'quality_changes'))
+
 
 # name header et Type
-def containersOfTypeHtmlPage(name, type_):
-    html = getHtmlHeader(name)
-
-    html += '<div class="menu">\n'
-    html += '<ul>'
-    
-    # find Instance Containers according to type=type_
-    containers = ContainerRegistry.getInstance().findInstanceContainers(type=type_)
-    
-    # Sort containers Order
-    containers.sort(key=lambda x: x.getId())
-    containers.sort(key=lambda x: x.getName())
-    
-    # Menu creation
-    for container in containers:
-        if container.getName() == "empty" :
-            html += '<li><a href="#'+ str(id(container)) + '">'+encode(container.getId())+'</a></li>\n'
-        else :
-            html += '<li><a href="#'+ str(id(container)) + '">'+encode(container.getName())+'</a></li>\n'   
-            
-    html += '</ul>'
-
-    # Java script filter function
-    html += keyFilterWidget()
-    html += '</div>'
-
-    html += '<div class="contents">'
-    html += formatAllContainersOfType(name, type_)
-    html += '</div>'
-
-    html += htmlFooter
-    return html
-
-def formatAllContainersOfType(name, type_):
-    html = '<h2>' + name + '</h2>\n'
-    
-    # type 'quality_changes' or 'user'
-    containers = ContainerRegistry.getInstance().findInstanceContainers(type=type_)
-
-    containers.sort(key=lambda x: x.getId())
-    containers.sort(key=lambda x: x.getName())
-    
-    for container in containers:
-        html += formatContainer(container)
-    return html
-
-# name header et Type
-def containersOfTypeHtmlPage2(name, type_ ,machine_id_):
+def containersOfTypeHtmlPage(name, type_ ,machine_id_):
     html = getHtmlHeader(name)
     
     
@@ -461,7 +412,7 @@ def containersOfTypeHtmlPage2(name, type_ ,machine_id_):
         if extruder_position is not None:
             html += '<ul>\n'
             
-        # Logger.log("d", "containersOfTypeHtmlPage2 : " + str(container) )
+        # Logger.log("d", "containersOfTypeHtmlPage : " + str(container) )
         if container.getName() == "empty" :
             html += '<li><a href="#'+ str(id(container)) + '">'+encode(container.getId())+'</a></li>\n'
         else :
@@ -476,13 +427,13 @@ def containersOfTypeHtmlPage2(name, type_ ,machine_id_):
     html += '</div>'
 
     html += '<div class="contents">'
-    html += formatAllContainersOfType2(name, type_, machine_id_)
+    html += formatAllContainersOfType(name, type_, machine_id_)
     html += '</div>'
 
     html += htmlFooter
     return html
 
-def formatAllContainersOfType2(name, type_, machine_id_):
+def formatAllContainersOfType(name, type_, machine_id_):
     html = '<h2>' + name + '</h2>\n'
     
     # type 'quality_changes' or 'user'
