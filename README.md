@@ -29,6 +29,9 @@ Change text separator for filtering option
 
 Compatibility Cura 5.0
 
+### Version 1.2.1
+
+Change the name for the generated file to compare two Cura analyse.
 
 ## Browser Javascript compatibility
 
