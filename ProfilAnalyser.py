@@ -49,6 +49,7 @@ import tempfile
 import html
 import json
 import re
+import webbrowser
 
 from UM.i18n import i18nCatalog
 i18n_cura_catalog = i18nCatalog('cura')
@@ -62,7 +63,7 @@ class ProfilAnalyser(Extension, QObject):
         QObject.__init__(self, parent)
         Extension.__init__(self)
 
-        self.addMenuItem('View Profil Analyse', viewCompare)
+        self.addMenuItem('View Profile Analyse', viewCompare)
         self.addMenuItem('View Active Configuration', viewAll)
         self.addMenuItem('View All Current Printer Profiles', viewAllQualityChanges)
         # self.addMenuItem('Set to Standard Quality', changeToStandardQuality)
@@ -898,11 +899,23 @@ def toggleNullValueJS():
       }
     } 
     '''
-    
+
+def has_browser():
+    try:
+        webbrowser.get()
+        return True
+    except webbrowser.Error:
+        return False
+        
 def openHtmlPage(page_name, html_contents):
     target = os.path.join(tempfile.gettempdir(), page_name)
     with open(target, 'w', encoding='utf-8') as fhandle:
         fhandle.write(html_contents)
+        
+    if not has_browser() :
+        Logger.log("d", "openHtmlPage default browser not defined") 
+        Message(text = "Default browser not defined open \n %s" % (target), title = i18n_cura_catalog.i18nc("@info:title", "Warning ! ProfilAnalyser"), message_type = Message.MessageType.WARNING).show()
+        
     QDesktopServices.openUrl(QUrl.fromLocalFile(target))
 
 def getHtmlHeader(page_name='Cura Settings'):
