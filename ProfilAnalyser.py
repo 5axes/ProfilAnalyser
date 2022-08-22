@@ -16,6 +16,7 @@
 #
 # V 1.2.0  01/05/2022 Update for Cura 5.0
 # V 1.2.1  10/05/2022 Add Version in the document name
+# V 1.2.2  20/08/2022 Remove Message-Type for compatibility
 #
 #-----------------------------------------------------------------------------------------------------------------------------
 
@@ -914,7 +915,7 @@ def openHtmlPage(page_name, html_contents):
         
     if not has_browser() :
         Logger.log("d", "openHtmlPage default browser not defined") 
-        Message(text = "Default browser not defined open \n %s" % (target), title = i18n_cura_catalog.i18nc("@info:title", "Warning ! ProfilAnalyser"), message_type = Message.MessageType.WARNING).show()
+        Message(text = "Default browser not defined open \n %s" % (target), title = i18n_cura_catalog.i18nc("@info:title", "Warning ! ProfilAnalyser")).show()
         
     QDesktopServices.openUrl(QUrl.fromLocalFile(target))
 
