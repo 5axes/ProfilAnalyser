@@ -11,7 +11,7 @@ Once Cura is running you can find the plugin in the Extensions menu -> Profil An
 
 ## Cura compatibility
 
-Plugin tested from release 4.8 to 5.0
+Plugin tested from release 4.8 to 5.1
 
 Plugin partialy tested in release 4.7 works whithout garanty
 
