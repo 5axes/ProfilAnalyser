@@ -15,7 +15,7 @@ Plugin tested from release 4.8 to 5.0
 
 Plugin partialy tested in release 4.7 works whithout garanty
 
-This plugin doesn't work in 4.6 si I guess for the previous versions.
+This plugin doesn't work in 4.6 so I guess for the previous versions.
 
 ## Modifications
 
