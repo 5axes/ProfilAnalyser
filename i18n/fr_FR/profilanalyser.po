@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Profil Analyser\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 15:10+0000\n"
-"PO-Revision-Date: 2023-01-19 22:53+0200\n"
+"PO-Revision-Date: 2023-01-19 23:06+0200\n"
 "Last-Translator: 5axes <5axes@free.fr>\n"
 "Language-Team: 5axes\n"
 "Language: fr\n"
@@ -20,7 +20,7 @@ msgstr ""
 #: __init__.py:12
 msgctxt "@label"
 msgid "ProfilAnalyser"
-msgstr "Profil Analyser"
+msgstr "Profil Analyseur"
 
 #: __init__.py:13
 msgctxt "@info:tooltip"
@@ -40,7 +40,7 @@ msgstr "Voir la configuration active"
 #: ProfilAnalyse.py:
 msgctxt "@menu"
 msgid "View All Current Printer Profiles"
-msgstr "Voir tous les profils de l'imprimantes actuel"
+msgstr "Voir tous les profils de l'imprimante actuel"
 
 #: ProfilAnalyse.py:
 msgctxt "@title"
