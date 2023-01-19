@@ -43,6 +43,10 @@ Compatibility Cura 5.0
 
 Change the name for the generated file to compare two Cura analyse.
 
+### Version 1.3.0
+
+Add French Translation, possibility for user to transalte into their own langage using [profilanalyser.pot](profilanalyser.pot).
+
 ## Browser Javascript compatibility
 
 JScript used in the Html page have been succesfuly tested on :
