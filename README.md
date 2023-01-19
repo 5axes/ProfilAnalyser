@@ -45,7 +45,7 @@ Change the name for the generated file to compare two Cura analyse.
 
 ### Version 1.3.0
 
-Add French Translation, possibility for user to transalte into their own langage using [profilanalyser.pot](profilanalyser.pot).
+Add French Translation, possibility for user to transalte into their own langage using [profilanalyser.pot](https://github.com/5axes/ProfilAnalyser/blob/main/i18n/profilanalyser.pot).
 
 ## Browser Javascript compatibility
 
