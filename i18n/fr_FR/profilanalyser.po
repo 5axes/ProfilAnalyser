@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Profil Analyser\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 15:10+0000\n"
-"PO-Revision-Date: 2023-01-19 23:06+0200\n"
+"PO-Revision-Date: 2023-01-19 23:14+0200\n"
 "Last-Translator: 5axes <5axes@free.fr>\n"
 "Language-Team: 5axes\n"
 "Language: fr\n"
@@ -30,7 +30,7 @@ msgstr "Analyseur pour les profils Cura"
 #: ProfilAnalyse.py:
 msgctxt "@menu"
 msgid "View Profile Analyse"
-msgstr "Voir le profil courant"
+msgstr "Analyser les Profils"
 
 #: ProfilAnalyse.py:
 msgctxt "@menu"
