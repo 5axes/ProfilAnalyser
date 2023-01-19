@@ -1,8 +1,8 @@
 {
     "name": "Profile Analyser",
     "author": "5@xes",
-    "version": "1.2.2",
+    "version": "1.3.0",
     "description": "Dump the contents of the profil settings to an HTML file.",
     "api": 7,
-    "supported_sdk_versions": ["7.3.0", "7.4.0", "7.5.0", "7.6.0", "7.7.0", "7.8.0", "7.9.0", "8.0.0"]
+    "supported_sdk_versions": ["7.3.0", "7.4.0", "7.5.0", "7.6.0", "7.7.0", "7.8.0", "7.9.0", "8.0.0", "8.1.0", "8.2.0"]
 }

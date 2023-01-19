@@ -17,6 +17,7 @@
 # V 1.2.0  01/05/2022 Update for Cura 5.0
 # V 1.2.1  10/05/2022 Add Version in the document name
 # V 1.2.2  20/08/2022 Remove Message-Type for compatibility
+# V 1.3.0  20/01/2023 French Translation 
 #
 #-----------------------------------------------------------------------------------------------------------------------------
 
@@ -44,7 +45,7 @@ from cura.CuraApplication import CuraApplication
 
 from UM.Logger import Logger
 from UM.Message import Message
-
+from UM.Resources import Resources
 import os.path
 import tempfile
 import html
@@ -59,14 +60,23 @@ i18n_extrud_catalog = i18nCatalog('fdmextruder.def.json')
 
 encode = html.escape
 
+Resources.addSearchPath(
+    os.path.join(os.path.abspath(os.path.dirname(__file__)))
+)  # Plugin translation file import
+
+catalog = i18nCatalog("profilanalyser")
+
+if catalog.hasTranslationLoaded():
+    Logger.log("i", "Profil Analyser Plugin translation loaded!")
+
 class ProfilAnalyser(Extension, QObject):
     def __init__(self, parent = None):
         QObject.__init__(self, parent)
         Extension.__init__(self)
 
-        self.addMenuItem('View Profile Analyse', viewCompare)
-        self.addMenuItem('View Active Configuration', viewAll)
-        self.addMenuItem('View All Current Printer Profiles', viewAllQualityChanges)
+        self.addMenuItem(catalog.i18nc("@menu", "View Profile Analyse"), viewCompare)
+        self.addMenuItem(catalog.i18nc("@menu", "View Active Configuration"), viewAll)
+        self.addMenuItem(catalog.i18nc("@menu", "View All Current Printer Profiles"), viewAllQualityChanges)
         # self.addMenuItem('Set to Standard Quality', changeToStandardQuality)
 
 def viewAll():
@@ -93,25 +103,25 @@ def htmlPage():
     html += '<ul>'
  
 
-    html += '<li><a href="#extruder_stacks">Extruder Stacks</a>\n'
+    html += '<li><a href="#extruder_stacks">' + catalog.i18nc("@html:title", "Extruder Stacks") + '</a>\n'
     html += formatExtruderStacksMenu()
     html += '</li>\n'
 
-    html += '<li><a href="#global_stack">Global Stack</a>'
+    html += '<li><a href="#global_stack">' + catalog.i18nc("@html:title", "Global Stack") + '</a>'
     html += formatContainerStackMenu(Application.getInstance().getGlobalContainerStack())
     html += '</li>\n'
 
     html += '</ul>\n'
     
     # Java script filter function
-    html += keyFilterWidget()
+    html += keyFilterWidget(catalog.i18nc("@html", "Filter key"))
     html += '</div>'
 
     # Contents creation
     html += '<div class="contents">'
     html += formatExtruderStacks()
      
-    html += '<h2 id="global_stack">Global Stack</h2>'
+    html += '<h2 id="global_stack">' + catalog.i18nc("@html:title", "Global Stack") + '</h2>'
     html += formatContainerStack(Application.getInstance().getGlobalContainerStack())
     
     html += '</div>'
@@ -170,7 +180,7 @@ def htmlComparePage():
     # Menu creation
     html += '<div class="menu">\n'
     
-    html += '<h3><a href="#Top_page">Profile List ' + encode(machine_id) + '</a></h3>'
+    html += '<h3><a href="#Top_page">' + catalog.i18nc("@html:title", "Profile List ") + encode(machine_id) + '</a></h3>'
     
     html += '<ul>\n'
     for profil in Profil_List:
@@ -180,16 +190,16 @@ def htmlComparePage():
     html += '</ul>\n'
 
     # Java script filter function
-    html += keyUnselectAllWidget()
-    html += keyFilterWidget()
-    html += toggleDifferencesWidget()
-    html += toggleNullValueWidget()
+    html += keyUnselectAllWidget(catalog.i18nc("@html", "Unselect all"))
+    html += keyFilterWidget(catalog.i18nc("@html", "Filter key"))
+    html += toggleDifferencesWidget(catalog.i18nc("@html", "Show only differences"))
+    html += toggleNullValueWidget(catalog.i18nc("@html", "Show only valued parameters"))
     html += '</div>\n'
     
         
     # Contents creation
     html += '\n<div class="contents">\n'
-    html += '<h2 id="Top_page">Profiles</h2>\n'
+    html += '<h2 id="Top_page">' + catalog.i18nc("@html:title", "Profiles") + '</h2>\n'
     short_value_properties = True
  
 
@@ -427,7 +437,7 @@ def containersOfTypeHtmlPage(name, type_ ,machine_id_):
     html += '</ul>'
 
     # Java script filter function
-    html += keyFilterWidget()
+    html += keyFilterWidget(catalog.i18nc("@html", "Filter key"))
     html += '</div>'
 
     html += '<div class="contents">'
@@ -744,30 +754,33 @@ def keyFilterJS():
     }
     '''
 
-def keyFilterWidget():
+def keyFilterWidget(txt_balise):
     html = '''
     <div class="key_filter">
-    &#x1F50E; filter key: <input type="text" id="key_filter" />
+    &#x1F50E; {balise}: <input type="text" id="key_filter" />
     </div>
     '''
+    html = html.format(balise=txt_balise)
     return html
 
-def keyUnselectAllWidget():
+def keyUnselectAllWidget(txt_balise):
     html = '''
     <div class="toggle_differences">
-    <input type="checkbox" id="unselect_all" onclick="UnselectAll()"/> Unselect all
+    <input type="checkbox" id="unselect_all" onclick="UnselectAll()"/> {balise}
 	</div>
     <br>
     '''
+    html = html.format(balise=txt_balise)
     return html
 
-def toggleNullValueWidget():
+def toggleNullValueWidget(txt_balise):
     html = '''
 	<div class="toggle_differences">
-    <input type="checkbox" id="toggle_nullvalue" onclick="toggleNullValue()"/> Show only valued parameters
+    <input type="checkbox" id="toggle_nullvalue" onclick="toggleNullValue()"/> {balise}
     </div>
     
     '''
+    html = html.format(balise=txt_balise)
     return html
     
 def toggleColumnVisibilityJS():
@@ -795,13 +808,15 @@ def toggleColumnVisibilityJS():
     }
     '''
 
-def toggleDifferencesWidget():
+def toggleDifferencesWidget(txt_balise):
     html = '''
     <br>
     <div class="toggle_differences">
-    <input type="checkbox" id="toggle_differences" onclick="toggleDifferences()"/> Show only differences
+    <input type="checkbox" id="toggle_differences" onclick="toggleDifferences()"/> {balise}
     </div>
+    
     '''
+    html = html.format(balise=txt_balise)
     return html
     
 def toggleUnselectAllJS():

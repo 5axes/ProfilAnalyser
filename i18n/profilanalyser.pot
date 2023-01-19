@@ -1,0 +1,90 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the Measure Tool package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Profil Analyser\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-11 15:10+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: __init__.py:12
+msgctxt "@label"
+msgid "ProfilAnalyser"
+msgstr ""
+
+#: __init__.py:13
+msgctxt "@info:tooltip"
+msgid "Analyser for Cura Profiles"
+msgstr ""
+
+#: ProfilAnalyse.py:
+msgctxt "@menu"
+msgid "View Profile Analyse"
+msgstr ""
+
+#: ProfilAnalyse.py:
+msgctxt "@menu"
+msgid "View Active Configuration"
+msgstr ""
+
+#: ProfilAnalyse.py:
+msgctxt "@menu"
+msgid "View All Current Printer Profiles"
+msgstr ""
+
+#: ProfilAnalyse.py:
+msgctxt "@html:title"
+msgid "Profiles"
+msgstr ""
+
+#: ProfilAnalyse.py:
+msgctxt "@html:title"
+msgid "Profile List "
+msgstr ""
+
+#: ProfilAnalyse.py:
+msgctxt "@html:title"
+msgid "Extruder Stacks"
+msgstr ""
+
+#: ProfilAnalyse.py:
+msgctxt "@html:title"
+msgid "Global Stack"
+msgstr ""
+
+#: ProfilAnalyse.py:
+msgctxt "@html:subtitle"
+msgid "Index"
+msgstr ""
+
+#: ProfilAnalyse.py:
+msgctxt "@html"
+msgid "Show only differences"
+msgstr ""
+
+#: ProfilAnalyse.py:
+msgctxt "@html"
+msgid "Show only valued parameters"
+msgstr ""
+
+#: ProfilAnalyse.py:
+msgctxt "@html"
+msgid "Unselect all"
+msgstr ""
+
+#: ProfilAnalyse.py:
+msgctxt "@html"
+msgid "Filter key"
+msgstr ""
+
+
