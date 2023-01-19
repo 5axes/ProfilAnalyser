@@ -93,7 +93,7 @@ def viewAllQualityChanges():
     global_stack = machine_manager.activeMachine
     machine_id=global_stack.quality.getMetaData().get('definition', '')    
     # Logger.log("d", "viewAllQualityChanges : " + machine_id )
-    openHtmlPage(HtmlFile, containersOfTypeHtmlPage('Printer Quality Changes', 'quality_changes', machine_id ))
+    openHtmlPage(HtmlFile, containersOfTypeHtmlPage(catalog.i18nc("@title", "Printer Quality Changes"), 'quality_changes', machine_id ))
     
 def htmlPage():
     html = getHtmlHeader()
@@ -461,14 +461,14 @@ def formatAllContainersOfType(name, type_, machine_id_):
         html += formatContainer(container)
     return html
     
-def formatContainer(container, name='Container', short_value_properties=False, show_keys=True):
+def formatContainer(container, name=catalog.i18nc("@html:subtitle", "Container"), short_value_properties=False, show_keys=True):
     html = ''
     html += '<a id="' + str(id(container)) + '" ></a>'
     #
     if safeCall(container.getName) == "empty" :
-        html += tableHeader(name + ': ' + safeCall(container.getId))
+        html += tableHeader(name + ' : ' + safeCall(container.getId))
     else :
-        html += tableHeader(name + ': ' + safeCall(container.getName))
+        html += tableHeader(name + ' : ' + safeCall(container.getName))
     
     html += formatContainerMetaDataRows(container)
 
@@ -516,12 +516,12 @@ def formatContainerMetaDataRows(def_container):
     
 def formatExtruderStacks():
     html = ''
-    html += '<h2 id="extruder_stacks">Extruder Stacks</h2>'
+    html += '<h2 id="extruder_stacks">' + catalog.i18nc("@html:title", "Extruder Stacks") + '</h2>'
     # machine = Application.getInstance().getMachineManager().activeMachine
     # for position, extruder_stack in sorted([(int(p), es) for p, es in machine.extruders.items()]):
     position=0
     for extruder_stack in Application.getInstance().getExtruderManager().getActiveExtruderStacks():
-        html += '<h3 id="extruder_index_' + str(position) + '">Index ' + str(position) + '</h3>'
+        html += '<h3 id="extruder_index_' + str(position) + '">' + catalog.i18nc("@html:subtitle", "Index") + ' ' + str(position) + '</h3>'
         html += formatContainerStack(extruder_stack)
         position += 1
     return html
@@ -534,7 +534,7 @@ def formatExtruderStacksMenu():
     position=0
     for extruder_stack in Application.getInstance().getExtruderManager().getActiveExtruderStacks():
         html += '<li>'
-        html += '<a href="#extruder_index_' + str(position) + '">Index ' + str(position) + '</a>\n'
+        html += '<a href="#extruder_index_' + str(position) + '">' + catalog.i18nc("@html:subtitle", "Index") + ' ' + str(position) + '</a>\n'
         html += formatContainerStackMenu(extruder_stack)
         html += '</li>'
         position += 1
@@ -545,7 +545,7 @@ def formatContainerStack(Cstack, show_stack_keys=True):
     html = '<div class="container_stack">\n'
     html += formatContainer(Cstack, name='Container Stack', short_value_properties=True)
     html += '<div class="container_stack_containers">\n'
-    html += '<h3>Containers</h3>\n'
+    html += '<h3>' + catalog.i18nc("@html:subtitle", "Containers") + '</h3>\n'
     for container in Cstack.getContainers():
         html += formatContainer(container, show_keys=show_stack_keys)
     html += '</div>\n'

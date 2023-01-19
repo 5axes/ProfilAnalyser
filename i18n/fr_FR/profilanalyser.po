@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: Profil Analyser\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 15:10+0000\n"
-"PO-Revision-Date: 2023-01-19 22:34+0200\n"
+"PO-Revision-Date: 2023-01-19 22:53+0200\n"
 "Last-Translator: 5axes <5axes@free.fr>\n"
 "Language-Team: 5axes\n"
 "Language: fr\n"
@@ -43,6 +43,11 @@ msgid "View All Current Printer Profiles"
 msgstr "Voir tous les profils de l'imprimantes actuel"
 
 #: ProfilAnalyse.py:
+msgctxt "@title"
+msgid "Printer Quality Changes"
+msgstr "Liste Profil Imprimante"
+
+#: ProfilAnalyse.py:
 msgctxt "@html:title"
 msgid "Profiles"
 msgstr "Profils"
@@ -61,6 +66,16 @@ msgstr "Données Extrudeuse"
 msgctxt "@html:title"
 msgid "Global Stack"
 msgstr "Données Globales"
+
+#: ProfilAnalyse.py:
+msgctxt "@html:subtitle"
+msgid "Containers"
+msgstr "Conteneurs"
+
+#: ProfilAnalyse.py:
+msgctxt "@html:subtitle"
+msgid "Container"
+msgstr "Conteneur"
 
 #: ProfilAnalyse.py:
 msgctxt "@html:subtitle"

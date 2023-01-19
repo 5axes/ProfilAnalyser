@@ -43,6 +43,11 @@ msgid "View All Current Printer Profiles"
 msgstr ""
 
 #: ProfilAnalyse.py:
+msgctxt "@title"
+msgid "Printer Quality Changes"
+msgstr ""
+
+#: ProfilAnalyse.py:
 msgctxt "@html:title"
 msgid "Profiles"
 msgstr ""
@@ -60,6 +65,16 @@ msgstr ""
 #: ProfilAnalyse.py:
 msgctxt "@html:title"
 msgid "Global Stack"
+msgstr ""
+
+#: ProfilAnalyse.py:
+msgctxt "@html:subtitle"
+msgid "Containers"
+msgstr ""
+
+#: ProfilAnalyse.py:
+msgctxt "@html:subtitle"
+msgid "Container"
 msgstr ""
 
 #: ProfilAnalyse.py:
