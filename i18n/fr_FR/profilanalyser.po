@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Profil Analyser\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-11 15:10+0000\n"
-"PO-Revision-Date: 2023-01-19 23:14+0200\n"
+"POT-Creation-Date: 2023-01-25 11:17+0000\n"
+"PO-Revision-Date: 2023-01-25 12:18+0200\n"
 "Last-Translator: 5axes <5axes@free.fr>\n"
 "Language-Team: 5axes\n"
 "Language: fr\n"
@@ -16,6 +16,86 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Virtaal 0.7.1\n"
+
+#: ProfilAnalyser.py:77
+msgctxt "@menu"
+msgid "View Profile Analyse"
+msgstr "Analyser les Profils"
+
+#: ProfilAnalyser.py:78
+msgctxt "@menu"
+msgid "View Active Configuration"
+msgstr "Voir la configuration active"
+
+#: ProfilAnalyser.py:79
+msgctxt "@menu"
+msgid "View All Current Printer Profiles"
+msgstr "Voir tous les profils de l'imprimante actuel"
+
+#: ProfilAnalyser.py:96
+msgctxt "@title"
+msgid "Printer Quality Changes"
+msgstr "Liste Profil Imprimante"
+
+#: ProfilAnalyser.py:106 ProfilAnalyser.py:519
+msgctxt "@html:title"
+msgid "Extruder Stacks"
+msgstr "Données Extrudeuse"
+
+#: ProfilAnalyser.py:110 ProfilAnalyser.py:124
+msgctxt "@html:title"
+msgid "Global Stack"
+msgstr "Données Globales"
+
+#: ProfilAnalyser.py:117 ProfilAnalyser.py:194 ProfilAnalyser.py:440
+msgctxt "@html"
+msgid "Filter key"
+msgstr "Filtre"
+
+#: ProfilAnalyser.py:183
+msgctxt "@html:title"
+msgid "Profile List "
+msgstr "Liste des profils "
+
+#: ProfilAnalyser.py:193
+msgctxt "@html"
+msgid "Unselect all"
+msgstr "Tout déselectionner"
+
+#: ProfilAnalyser.py:195
+msgctxt "@html"
+msgid "Show only differences"
+msgstr "Voir uniquement les différences"
+
+#: ProfilAnalyser.py:196
+msgctxt "@html"
+msgid "Show only valued parameters"
+msgstr "Voir les paramètres avec des valeurs"
+
+#: ProfilAnalyser.py:202
+msgctxt "@html:title"
+msgid "Profiles"
+msgstr "Profils"
+
+#: ProfilAnalyser.py:464
+msgctxt "@html:subtitle"
+msgid "Container"
+msgstr "Conteneur"
+
+#: ProfilAnalyser.py:524 ProfilAnalyser.py:537
+msgctxt "@html:subtitle"
+msgid "Index"
+msgstr "Index"
+
+#: ProfilAnalyser.py:548
+msgctxt "@html:subtitle"
+msgid "Containers"
+msgstr "Conteneurs"
+
+#: ProfilAnalyser.py:933
+msgctxt "@info:title"
+msgid "Warning ! ProfilAnalyser"
+msgstr "Attention ! Profil Analyser"
 
 #: __init__.py:12
 msgctxt "@label"
@@ -26,78 +106,3 @@ msgstr "Profil Analyseur"
 msgctxt "@info:tooltip"
 msgid "Analyser for Cura Profiles"
 msgstr "Analyseur pour les profils Cura"
-
-#: ProfilAnalyse.py:
-msgctxt "@menu"
-msgid "View Profile Analyse"
-msgstr "Analyser les Profils"
-
-#: ProfilAnalyse.py:
-msgctxt "@menu"
-msgid "View Active Configuration"
-msgstr "Voir la configuration active"
-
-#: ProfilAnalyse.py:
-msgctxt "@menu"
-msgid "View All Current Printer Profiles"
-msgstr "Voir tous les profils de l'imprimante actuel"
-
-#: ProfilAnalyse.py:
-msgctxt "@title"
-msgid "Printer Quality Changes"
-msgstr "Liste Profil Imprimante"
-
-#: ProfilAnalyse.py:
-msgctxt "@html:title"
-msgid "Profiles"
-msgstr "Profils"
-
-#: ProfilAnalyse.py:
-msgctxt "@html:title"
-msgid "Profile List "
-msgstr "Liste des profils "
-
-#: ProfilAnalyse.py:
-msgctxt "@html:title"
-msgid "Extruder Stacks"
-msgstr "Données Extrudeuse"
-
-#: ProfilAnalyse.py:
-msgctxt "@html:title"
-msgid "Global Stack"
-msgstr "Données Globales"
-
-#: ProfilAnalyse.py:
-msgctxt "@html:subtitle"
-msgid "Containers"
-msgstr "Conteneurs"
-
-#: ProfilAnalyse.py:
-msgctxt "@html:subtitle"
-msgid "Container"
-msgstr "Conteneur"
-
-#: ProfilAnalyse.py:
-msgctxt "@html:subtitle"
-msgid "Index"
-msgstr "Index"
-
-#: ProfilAnalyse.py:
-msgctxt "@html"
-msgid "Show only differences"
-msgstr "Voir uniquement les différences"
-
-#: ProfilAnalyse.py:
-msgctxt "@html"
-msgid "Show only valued parameters"
-msgstr "Voir les paramètres avec des valeurs"
-
-#: ProfilAnalyse.py:
-msgctxt "@html"
-msgid "Unselect all"
-msgstr "Tout déselectionner"
-
-#: ProfilAnalyse.py:
-msgctxt "@html"
-msgid "Filter key"
-msgstr "Filtre"
