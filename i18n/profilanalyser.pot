@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Profil Analyser\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-11 15:10+0000\n"
+"POT-Creation-Date: 2023-01-25 11:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,86 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ProfilAnalyser.py:77
+msgctxt "@menu"
+msgid "View Profile Analyse"
+msgstr ""
+
+#: ProfilAnalyser.py:78
+msgctxt "@menu"
+msgid "View Active Configuration"
+msgstr ""
+
+#: ProfilAnalyser.py:79
+msgctxt "@menu"
+msgid "View All Current Printer Profiles"
+msgstr ""
+
+#: ProfilAnalyser.py:96
+msgctxt "@title"
+msgid "Printer Quality Changes"
+msgstr ""
+
+#: ProfilAnalyser.py:106 ProfilAnalyser.py:519
+msgctxt "@html:title"
+msgid "Extruder Stacks"
+msgstr ""
+
+#: ProfilAnalyser.py:110 ProfilAnalyser.py:124
+msgctxt "@html:title"
+msgid "Global Stack"
+msgstr ""
+
+#: ProfilAnalyser.py:117 ProfilAnalyser.py:194 ProfilAnalyser.py:440
+msgctxt "@html"
+msgid "Filter key"
+msgstr ""
+
+#: ProfilAnalyser.py:183
+msgctxt "@html:title"
+msgid "Profile List "
+msgstr ""
+
+#: ProfilAnalyser.py:193
+msgctxt "@html"
+msgid "Unselect all"
+msgstr ""
+
+#: ProfilAnalyser.py:195
+msgctxt "@html"
+msgid "Show only differences"
+msgstr ""
+
+#: ProfilAnalyser.py:196
+msgctxt "@html"
+msgid "Show only valued parameters"
+msgstr ""
+
+#: ProfilAnalyser.py:202
+msgctxt "@html:title"
+msgid "Profiles"
+msgstr ""
+
+#: ProfilAnalyser.py:464
+msgctxt "@html:subtitle"
+msgid "Container"
+msgstr ""
+
+#: ProfilAnalyser.py:524 ProfilAnalyser.py:537
+msgctxt "@html:subtitle"
+msgid "Index"
+msgstr ""
+
+#: ProfilAnalyser.py:548
+msgctxt "@html:subtitle"
+msgid "Containers"
+msgstr ""
+
+#: ProfilAnalyser.py:933
+msgctxt "@info:title"
+msgid "Warning ! ProfilAnalyser"
+msgstr ""
 
 #: __init__.py:12
 msgctxt "@label"
@@ -26,80 +106,3 @@ msgstr ""
 msgctxt "@info:tooltip"
 msgid "Analyser for Cura Profiles"
 msgstr ""
-
-#: ProfilAnalyse.py:
-msgctxt "@menu"
-msgid "View Profile Analyse"
-msgstr ""
-
-#: ProfilAnalyse.py:
-msgctxt "@menu"
-msgid "View Active Configuration"
-msgstr ""
-
-#: ProfilAnalyse.py:
-msgctxt "@menu"
-msgid "View All Current Printer Profiles"
-msgstr ""
-
-#: ProfilAnalyse.py:
-msgctxt "@title"
-msgid "Printer Quality Changes"
-msgstr ""
-
-#: ProfilAnalyse.py:
-msgctxt "@html:title"
-msgid "Profiles"
-msgstr ""
-
-#: ProfilAnalyse.py:
-msgctxt "@html:title"
-msgid "Profile List "
-msgstr ""
-
-#: ProfilAnalyse.py:
-msgctxt "@html:title"
-msgid "Extruder Stacks"
-msgstr ""
-
-#: ProfilAnalyse.py:
-msgctxt "@html:title"
-msgid "Global Stack"
-msgstr ""
-
-#: ProfilAnalyse.py:
-msgctxt "@html:subtitle"
-msgid "Containers"
-msgstr ""
-
-#: ProfilAnalyse.py:
-msgctxt "@html:subtitle"
-msgid "Container"
-msgstr ""
-
-#: ProfilAnalyse.py:
-msgctxt "@html:subtitle"
-msgid "Index"
-msgstr ""
-
-#: ProfilAnalyse.py:
-msgctxt "@html"
-msgid "Show only differences"
-msgstr ""
-
-#: ProfilAnalyse.py:
-msgctxt "@html"
-msgid "Show only valued parameters"
-msgstr ""
-
-#: ProfilAnalyse.py:
-msgctxt "@html"
-msgid "Unselect all"
-msgstr ""
-
-#: ProfilAnalyse.py:
-msgctxt "@html"
-msgid "Filter key"
-msgstr ""
-
-
