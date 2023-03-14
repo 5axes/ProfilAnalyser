@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Profil Analyser\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-25 11:17+0000\n"
-"PO-Revision-Date: 2023-01-25 12:18+0200\n"
+"POT-Creation-Date: 2023-03-14 01:39+0000\n"
+"PO-Revision-Date: 2023-03-14 02:41+0200\n"
 "Last-Translator: 5axes <5axes@free.fr>\n"
 "Language-Team: 5axes\n"
 "Language: fr\n"
@@ -19,15 +19,20 @@ msgstr ""
 
 #: ProfilAnalyser.py:77
 msgctxt "@menu"
+msgid "Profile Analyser"
+msgstr "Analyseur Profil"
+
+#: ProfilAnalyser.py:78
+msgctxt "@menu"
 msgid "View Profile Analyse"
 msgstr "Analyser les Profils"
 
-#: ProfilAnalyser.py:78
+#: ProfilAnalyser.py:79
 msgctxt "@menu"
 msgid "View Active Configuration"
 msgstr "Voir la configuration active"
 
-#: ProfilAnalyser.py:79
+#: ProfilAnalyser.py:80
 msgctxt "@menu"
 msgid "View All Current Printer Profiles"
 msgstr "Voir tous les profils de l'imprimante actuel"
@@ -37,7 +42,7 @@ msgctxt "@title"
 msgid "Printer Quality Changes"
 msgstr "Liste Profil Imprimante"
 
-#: ProfilAnalyser.py:106 ProfilAnalyser.py:519
+#: ProfilAnalyser.py:106 ProfilAnalyser.py:465
 msgctxt "@html:title"
 msgid "Extruder Stacks"
 msgstr "Données Extrudeuse"
@@ -47,7 +52,7 @@ msgctxt "@html:title"
 msgid "Global Stack"
 msgstr "Données Globales"
 
-#: ProfilAnalyser.py:117 ProfilAnalyser.py:194 ProfilAnalyser.py:440
+#: ProfilAnalyser.py:117 ProfilAnalyser.py:194 ProfilAnalyser.py:386
 msgctxt "@html"
 msgid "Filter key"
 msgstr "Filtre"
@@ -77,30 +82,30 @@ msgctxt "@html:title"
 msgid "Profiles"
 msgstr "Profils"
 
-#: ProfilAnalyser.py:464
+#: ProfilAnalyser.py:410
 msgctxt "@html:subtitle"
 msgid "Container"
 msgstr "Conteneur"
 
-#: ProfilAnalyser.py:524 ProfilAnalyser.py:537
+#: ProfilAnalyser.py:470 ProfilAnalyser.py:483
 msgctxt "@html:subtitle"
 msgid "Index"
 msgstr "Index"
 
-#: ProfilAnalyser.py:548
+#: ProfilAnalyser.py:494
 msgctxt "@html:subtitle"
 msgid "Containers"
 msgstr "Conteneurs"
 
-#: ProfilAnalyser.py:933
+#: ProfilAnalyser.py:879
 msgctxt "@info:title"
 msgid "Warning ! ProfilAnalyser"
-msgstr "Attention ! Profil Analyser"
+msgstr "Attention ! Analyseur Profil"
 
 #: __init__.py:12
 msgctxt "@label"
 msgid "ProfilAnalyser"
-msgstr "Profil Analyseur"
+msgstr "Analyseur Profil"
 
 #: __init__.py:13
 msgctxt "@info:tooltip"
