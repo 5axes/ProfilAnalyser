@@ -74,10 +74,10 @@ class ProfilAnalyser(Extension, QObject):
         QObject.__init__(self, parent)
         Extension.__init__(self)
 
+        self.setMenuName(catalog.i18nc("@menu", "Profile Analyser"))
         self.addMenuItem(catalog.i18nc("@menu", "View Profile Analyse"), viewCompare)
         self.addMenuItem(catalog.i18nc("@menu", "View Active Configuration"), viewAll)
         self.addMenuItem(catalog.i18nc("@menu", "View All Current Printer Profiles"), viewAllQualityChanges)
-        # self.addMenuItem('Set to Standard Quality', changeToStandardQuality)
 
 def viewAll():
     HtmlFile = str(CuraVersion).replace('.','-') + '_cura_settings.html'
@@ -348,60 +348,6 @@ def htmlComparePage():
     
     Logger.log("d", "HtmlComparePage : Fin")
     return html
-
-# Change the 'quality_type' to 'standard' if 'not_supported'
-def changeToStandardQuality():
-    #stack = Application.getInstance().getGlobalContainerStack()
-
-    machine_manager = Application.getInstance().getMachineManager()
-    g_stack = machine_manager.activeMachine
-    machine_id=str(g_stack.quality.getMetaDataEntry('definition'))
-    
-    if machine_id == '' or machine_id == 'None':
-        machine_quality_changes = machine_manager.activeMachine.qualityChanges
-        machine_id=str(machine_quality_changes.getMetaDataEntry('definition'))
-    
-    # Logger.log("d", "First Machine_id : %s", machine_id )    
-    containers = ContainerRegistry.getInstance().findInstanceContainers(definition = machine_id, type='quality')
-    
-    liste_quality = []
-    for container in containers:
-        #
-        MetaData_quality_type = container.getMetaDataEntry('quality_type')
-        if MetaData_quality_type is not None :
-            if MetaData_quality_type != 'not_supported' :
-                # Logger.log("d", "New MetaData_quality_type : %s for %s", str(MetaData_quality_type), container.getId() )
-                liste_quality.append(MetaData_quality_type)
-    
-    liste_quality = list(dict.fromkeys(liste_quality))
-    new_quality='not_supported'
-    
-    try:
-        new_quality=liste_quality[0]
-
-    except:
-        pass
-
-    for ql in liste_quality:
-        if ql == 'standard':
-            new_quality='standard'
-            break
-        if ql == 'normal':
-            new_quality='normal'
-            break
-
-    # Logger.log("d", "New_quality : %s", str(new_quality) )
-    global_stack = Application.getInstance().getGlobalContainerStack()
-    for container in global_stack.getContainers():
-        #
-        MetaData_quality_type = container.getMetaDataEntry('quality_type')
-        if MetaData_quality_type is not None :
-            if MetaData_quality_type == 'not_supported' :
-                container.setMetaDataEntry('quality_type', new_quality)
-                container.setDirty(True)
-                MetaData_quality_type = container.getMetaDataEntry('quality_type')
-                Logger.log("d", "New MetaData_quality_type : %s for %s", str(MetaData_quality_type), container.getId() )
-
 
 # name header et Type
 def containersOfTypeHtmlPage(name, type_ ,machine_id_):
